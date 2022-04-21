@@ -1,0 +1,26 @@
+#pragma once
+
+#define UPDATE_CREATE_DATABASE	0x01
+#define UPDATE_DROP_DATABASE	0x02
+#define UPDATE_OPEN_DATABASE	0x03
+
+#define UPDATE_CREATE_TABLE		0x04
+#define UPDATE_DROP_TABLE		0x05
+#define UPDATE_RENAME_TABLE		0x06
+#define UPDATE_TABLE_VIEW		0x07
+
+#define UPDATE_ADD_FIELD		0x08
+
+#define UPDATE_INSERT_RECORD	0x09
+#define UPDATE_RECORD_VIEW		0x10
+
+#define MENU_DATABASE			1
+#define MENU_TABLE				2
+#define MENU_FIELD				3
+#define MENU_RECORD				4
+#define MENU_RCLICK				-1
+
+#define DEFAULT	0
+#define TABLE	1
+#define FIELD	2
+#define RECORD	3

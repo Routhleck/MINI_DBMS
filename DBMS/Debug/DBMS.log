@@ -1,0 +1,36 @@
+﻿  stdafx.cpp
+  ADDFieldDlg.cpp
+  INSERTRecordDlg.cpp
+  RecordDao.cpp
+  RecordLogic.cpp
+  RecordsView.cpp
+  RENAMETableDlg.cpp
+  AppException.cpp
+  CharUtil.cpp
+  CREATEDatabaseDlg.cpp
+  CREATETableDlg.cpp
+  DBDao.cpp
+  DBEntity.cpp
+  DBLogic.cpp
+  FieldEntity.cpp
+  FileLogic.cpp
+  FileUtil.cpp
+  RecordEntity.cpp
+  TableDao.cpp
+E:\download\dbms\DBMS-master\DBMS\TableDao.cpp(166,16): warning C4244: “初始化”: 从“ULONGLONG”转换到“long”，可能丢失数据
+E:\download\dbms\DBMS-master\DBMS\TableDao.cpp(183,30): warning C4244: “=”: 从“ULONGLONG”转换到“long”，可能丢失数据
+E:\download\dbms\DBMS-master\DBMS\TableDao.cpp(213,16): warning C4244: “初始化”: 从“ULONGLONG”转换到“long”，可能丢失数据
+E:\download\dbms\DBMS-master\DBMS\TableDao.cpp(229,30): warning C4244: “=”: 从“ULONGLONG”转换到“long”，可能丢失数据
+  TableEntity.cpp
+  DBMS.cpp
+  正在生成代码...
+  正在编译...
+  DBMSDoc.cpp
+  DBMSView.cpp
+  DBTreeView.cpp
+  MainFrm.cpp
+  TableLogic.cpp
+  TableView.cpp
+  TimeUtil.cpp
+  正在生成代码...
+  DBMS.vcxproj -> E:\download\dbms\DBMS-master\Debug\DBMS.exe
