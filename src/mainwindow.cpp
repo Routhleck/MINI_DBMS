@@ -5,6 +5,9 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 #include <QSettings>
+#include <iostream>
+
+using namespace std;
 
 MainWindow::MainWindow(QWidget* parent, DbController* dbc, QThread* dbt) :
     QMainWindow(parent),
@@ -20,11 +23,8 @@ MainWindow::MainWindow(QWidget* parent, DbController* dbc, QThread* dbt) :
     QStringList sql_drivers = QSqlDatabase::drivers();
     ui->label_qmysql_icon->setPixmap(
                 QPixmap(":/icons/" + QString(sql_drivers.contains("QMYSQL") ? "success" : "failure") + ".ico"));
-    ui->label_qodbc_icon->setPixmap(
-                QPixmap(":/icons/" + QString(sql_drivers.contains("QODBC") ? "success" : "failure") + ".ico"));
 
     ui->radio_mysql->setEnabled(sql_drivers.contains("QMYSQL"));
-    ui->radio_mssql->setEnabled(sql_drivers.contains("QODBC"));
 
     if (!sql_drivers.contains("QMYSQL") && !sql_drivers.contains("QODBC"))
         ui->groupBox_sql_connect->setEnabled(false);
@@ -34,10 +34,8 @@ MainWindow::MainWindow(QWidget* parent, DbController* dbc, QThread* dbt) :
     // ui => ui
 
     connect(ui->button_connect, SIGNAL(clicked()), this, SLOT(connectToServerRequested()));
-    connect(ui->radio_mssql, SIGNAL(clicked()), this, SLOT(engineChanged()));
     connect(ui->radio_mysql, SIGNAL(clicked()), this, SLOT(engineChanged()));
     connect(ui->radio_sql_authentication, SIGNAL(clicked()), this, SLOT(authenticationMethodChanged()));
-    connect(ui->radio_windows_authentication, SIGNAL(clicked()), this, SLOT(authenticationMethodChanged()));
     connect(ui->button_show_table, SIGNAL(clicked()), this, SLOT(showTableRequested()));
 
     // ui => db_controller
@@ -66,15 +64,11 @@ MainWindow::MainWindow(QWidget* parent, DbController* dbc, QThread* dbt) :
         QSettings settings(inifile, QSettings::IniFormat);
 
         QString engine = settings.value("sql/engine", "").toString();
+        cout << settings.value("sql/engine", "").toString().toStdString() << endl;
         if (engine == "mysql")
         {
             ui->radio_mysql->setChecked(true);
-            ui->radio_windows_authentication->setEnabled(false);
             ui->lineEdit_driver->setEnabled(false);
-        }
-        else if (engine == "mssql")
-        {
-            ui->radio_mssql->setChecked(true);
         }
 
         ui->lineEdit_driver->setText(settings.value("sql/driver", "").toString());
@@ -82,7 +76,6 @@ MainWindow::MainWindow(QWidget* parent, DbController* dbc, QThread* dbt) :
         ui->spinBox_server_port->setValue(settings.value("sql/port", 0).toInt());
         QString auth = settings.value("sql/authentication", "").toString();
         ui->radio_sql_authentication->setChecked(auth == "server" && (engine == "mssql" || engine == "mysql"));
-        ui->radio_windows_authentication->setChecked(auth == "windows" && engine == "mssql");
         ui->lineEdit_login->setText(settings.value("sql/login", "").toString());
         ui->lineEdit_password->setText(settings.value("sql/password", "").toString()); // plain text, so secure...
         ui->lineEdit_database_name->setText(settings.value("sql/database", "").toString());
@@ -109,8 +102,6 @@ void MainWindow::connectToServerRequested()
     QString engine;
     if (ui->radio_mysql->isChecked())
         engine = "mysql";
-    else if (ui->radio_mssql->isChecked())
-        engine = "mssql";
     else
     {
         QMessageBox::information(this,
@@ -181,18 +172,7 @@ void MainWindow::authenticationMethodChanged()
 
 void MainWindow::engineChanged()
 {
-    bool is_mssql_engine = ui->radio_mssql->isChecked();
 
-    ui->lineEdit_driver->setEnabled(is_mssql_engine);
-    ui->radio_windows_authentication->setEnabled(is_mssql_engine);
-
-    ui->spinBox_server_port->setValue(is_mssql_engine ? 1433 : 3306);
-
-    if (!is_mssql_engine)
-    {
-        ui->radio_sql_authentication->setChecked(true);
-        emit authenticationMethodChanged();
-    }
 }
 
 void MainWindow::showTableRequested()

@@ -53,26 +53,10 @@
         <widget class="QLabel" name="label_qmysql_icon">
          <property name="geometry">
           <rect>
-           <x>53</x>
-           <y>23</y>
-           <width>13</width>
-           <height>13</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="../res/icons.qrc">:/icons/failure.ico</pixmap>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_qodbc_icon">
-         <property name="geometry">
-          <rect>
-           <x>143</x>
-           <y>23</y>
-           <width>13</width>
-           <height>13</height>
+           <x>90</x>
+           <y>21</y>
+           <width>16</width>
+           <height>16</height>
           </rect>
          </property>
          <property name="text">
@@ -85,27 +69,14 @@
         <widget class="QLabel" name="label_7">
          <property name="geometry">
           <rect>
-           <x>73</x>
-           <y>22</y>
+           <x>110</x>
+           <y>20</y>
            <width>65</width>
-           <height>13</height>
+           <height>16</height>
           </rect>
          </property>
          <property name="text">
           <string>QMYSQL</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_8">
-         <property name="geometry">
-          <rect>
-           <x>163</x>
-           <y>22</y>
-           <width>65</width>
-           <height>13</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>QODBC</string>
          </property>
         </widget>
        </widget>
@@ -145,7 +116,7 @@
            <x>10</x>
            <y>175</y>
            <width>231</width>
-           <height>141</height>
+           <height>121</height>
           </rect>
          </property>
          <property name="title">
@@ -187,28 +158,6 @@
           </property>
           <property name="checked">
            <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QRadioButton" name="radio_windows_authentication">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>114</y>
-            <width>211</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Windows authentication</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
           </property>
          </widget>
          <widget class="QLineEdit" name="lineEdit_password">
@@ -303,9 +252,9 @@
          <property name="geometry">
           <rect>
            <x>100</x>
-           <y>326</y>
+           <y>320</y>
            <width>141</width>
-           <height>20</height>
+           <height>21</height>
           </rect>
          </property>
          <property name="text">
@@ -316,9 +265,9 @@
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>326</y>
+           <y>315</y>
            <width>81</width>
-           <height>20</height>
+           <height>31</height>
           </rect>
          </property>
          <property name="text">
@@ -398,26 +347,13 @@
          <property name="title">
           <string>Engine</string>
          </property>
-         <widget class="QRadioButton" name="radio_mssql">
-          <property name="geometry">
-           <rect>
-            <x>135</x>
-            <y>20</y>
-            <width>82</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>MSSQL</string>
-          </property>
-         </widget>
          <widget class="QRadioButton" name="radio_mysql">
           <property name="geometry">
            <rect>
-            <x>45</x>
-            <y>20</y>
+            <x>80</x>
+            <y>26</y>
             <width>82</width>
-            <height>17</height>
+            <height>21</height>
            </rect>
           </property>
           <property name="text">
@@ -556,14 +492,12 @@
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>radio_mysql</tabstop>
-  <tabstop>radio_mssql</tabstop>
   <tabstop>lineEdit_driver</tabstop>
   <tabstop>lineEdit_server_address</tabstop>
   <tabstop>spinBox_server_port</tabstop>
   <tabstop>radio_sql_authentication</tabstop>
   <tabstop>lineEdit_login</tabstop>
   <tabstop>lineEdit_password</tabstop>
-  <tabstop>radio_windows_authentication</tabstop>
   <tabstop>lineEdit_database_name</tabstop>
   <tabstop>button_connect</tabstop>
   <tabstop>comboBox_table_name</tabstop>
