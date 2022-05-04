@@ -36,33 +36,33 @@ public:
 
 private:
 	string attributeName;
-	string value; //the value to be compared
-	int operate; //the type to be compared
+	string value; //要比较的值
+	int operate; //要比较的类型
 };
 
 
-//class for API interefere
+//API干涉类
 class API{
 public:
     API();
 	~API();
-    void dropTable(string tableName); //drop table API interfere
-    void createTable(string tableName, vector<Attribute>* attributeVector, string primaryKeyName,int primaryKeyLocation); //create table API interfere
-    void dropIndex(string indexName); //drop index API interfere
-	void createIndex(string indexName, string tableName, string attributeName); //create index API interfere
-    void showRecord(string tableName, vector<string>* attributeNameVector = NULL); //show records for query
-	void showRecord(string tableName,  vector<string>* attributeNameVector, vector<Condition>* conditionVector); //show records for designed condition
-	void insertRecord(string tableName,vector<string>* recordContent); //insert records into table
-	void deleteRecord(string tableName); //delete records in the table
-	void deleteRecord(string tableName, vector<Condition>* conditionVector); //delete records for designed condition
-	int getRecordNum(string tableName); //return the records number
-	int getRecordSize(string tableName); //get the record size
-	int getTypeSize(int type); //get a attribute type size
-    void getAllIndexAddressInfo(vector<IndexInfo> *indexNameVector); //get all index file names
-    int getAttribute(string tableName, vector<Attribute>* attributeVector); //get attributes of the table
-    void insertIndex(string indexName, char* value, int type, int blockOffset); //insert index API interfere
-    void deleteRecordIndex(char* recordBegin,int recordSize, vector<Attribute>* attributeVector, int blockOffset); //delete reocrds in an index
-    void insertRecordIndex(char* recordBegin,int recordSize, vector<Attribute>* attributeVector, int blockOffset); //insert records in an index
+    void dropTable(string tableName); //删除表API干扰
+    void createTable(string tableName, vector<Attribute>* attributeVector, string primaryKeyName,int primaryKeyLocation); //创建表API干扰
+    void dropIndex(string indexName); //删除索引API干扰
+	void createIndex(string indexName, string tableName, string attributeName); //创建索引API干扰
+    void showRecord(string tableName, vector<string>* attributeNameVector = NULL); //显示查询记录
+	void showRecord(string tableName,  vector<string>* attributeNameVector, vector<Condition>* conditionVector); //显示设计状态的记录
+	void insertRecord(string tableName,vector<string>* recordContent); //向表中插入记录
+	void deleteRecord(string tableName); //删除表中的记录
+	void deleteRecord(string tableName, vector<Condition>* conditionVector); //删除设计条件下的记录
+	int getRecordNum(string tableName); //返回记录编号
+	int getRecordSize(string tableName); //获取记录大小
+	int getTypeSize(int type); //获取属性类型大小
+    void getAllIndexAddressInfo(vector<IndexInfo> *indexNameVector); //获取所有索引文件名
+    int getAttribute(string tableName, vector<Attribute>* attributeVector); //获取表的属性
+    void insertIndex(string indexName, char* value, int type, int blockOffset); //插入索引API干扰
+    void deleteRecordIndex(char* recordBegin,int recordSize, vector<Attribute>* attributeVector, int blockOffset); //删除索引中的记录
+    void insertRecordIndex(char* recordBegin,int recordSize, vector<Attribute>* attributeVector, int blockOffset); //在索引中插入记录
     void setRecordManager(RecordManager *rmInput);
     void setCatalogManager(CatalogManager *cmInput);
     void setIndexManager(IndexManager *imInput);
@@ -72,12 +72,12 @@ private:
     RecordManager *rm;
     CatalogManager *cm;
     IndexManager *im;
-	int length; //the length of the longest value or attribute in a table
+	int length; //表中最长的值或属性的长度
 
-    int tableExist(string tableName); //judge if the table exist
-    int getIndexNameList(string tableName, vector<string>* indexNameVector); //get all the index names
-    string getPrimaryIndex(string tableName); //get index on primary attribute
-    void tableAttributePrint(vector<string>* name); //print the attribute of a table
+    int tableExist(string tableName); //判断表是否存在
+    int getIndexNameList(string tableName, vector<string>* indexNameVector); //获取所有索引名
+    string getPrimaryIndex(string tableName); //获取主属性的索引
+    void tableAttributePrint(vector<string>* name); //打印表的属性
 };
 
 #endif
