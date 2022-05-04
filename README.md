@@ -1,2 +1,2 @@
-# QT_DBMS
-simple DBMS through QT C++
+# MINI_DBMS
+simple DBMS through C++
