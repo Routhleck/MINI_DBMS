@@ -16,24 +16,24 @@ public:
 	BufferManager bm;
 	CatalogManager();
 	virtual ~CatalogManager();
-	int addIndex(string indexName, string tableName, string attributeName, int type); //add index of a table
-	int revokeIndexOnAttribute(string tableName, string AttributeName, string indexName); //revoke index of table
-	int findTable(string tableName); //find table of designed tablename
-	int findIndex(string indexName); //find index of designed indexname
-	int dropTable(string tableName); //drop a designed table
-	int dropIndex(string index); //drop a designed index
-	int deleteValue(string tableName, int deleteNum);// delete the number of record
-	int insertRecord(string tableName, int recordNum);  // increment the number of record
-	int getRecordNum(string tableName); //get the records number of a table
-	int getIndexNameList(string tableName, vector<string>* indexNameVector); //get index name list of a table
-	int getAllIndex(vector<IndexInfo> * indexs); //get all indexs of a table
-	int setIndexOnAttribute(string tableName, string AttributeName, string indexName); //set index on attribute of a table
-	int addTable(string tableName, vector<Attribute>* attributeVector, string primaryKeyName, int primaryKeyLocation); //add table of attribute
+	int addIndex(string indexName, string tableName, string attributeName, int type); //添加表索引
+	int revokeIndexOnAttribute(string tableName, string AttributeName, string indexName); //撤销表索引
+	int findTable(string tableName); //找到设计表名的表
+	int findIndex(string indexName); //找到设计索引名的索引
+	int dropTable(string tableName); //删除一个设计好的表
+	int dropIndex(string index); //删除一个设计好的索引
+	int deleteValue(string tableName, int deleteNum);// 删除记录个数
+	int insertRecord(string tableName, int recordNum);  // 增加记录的数量
+	int getRecordNum(string tableName); //获取表的记录数
+	int getIndexNameList(string tableName, vector<string>* indexNameVector); //获取表的索引名列表
+	int getAllIndex(vector<IndexInfo> * indexs); //获取一个表的所有索引
+	int setIndexOnAttribute(string tableName, string AttributeName, string indexName); //在表的属性上设置索引
+	int addTable(string tableName, vector<Attribute>* attributeVector, string primaryKeyName, int primaryKeyLocation); //添加属性表
 	int getIndexType(string indexName);
 	int getAttribute(string tableName, vector<Attribute>* attributeVector);
-	int calcuteLenth(string tableName); //calculate the length of a table
-	int calcuteLenth(int type); //calculate the length of a type
-	void getRecordString(string tableName, vector<string>* recordContent, char* recordResult); //get the record in string
+	int calcuteLenth(string tableName); //计算表的长度
+	int calcuteLenth(int type); //计算类型的长度
+	void getRecordString(string tableName, vector<string>* recordContent, char* recordResult); //在字符串中获取记录
 };
 
 #endif
