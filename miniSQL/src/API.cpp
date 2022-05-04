@@ -4,9 +4,9 @@
 
 using namespace std;
 
-#define UNKNOWN_FILE -10 //unexist file
-#define TABLE_FILE -20 //file including table information
-#define INDEX_FILE -30 //file including index information
+#define UNKNOWN_FILE -10 //不存在文件
+#define TABLE_FILE -20 //包含表信息的文件
+#define INDEX_FILE -30 //包含索引信息的文件
 
 CatalogManager *cm;
 IndexManager* im;
@@ -30,7 +30,7 @@ bool Condition::FitAttribute(int content) {
 	int myContent;
 	ss >> myContent;
 
-    //judge which condition to implement
+    //判断执行哪种条件
 	switch (operate) {
 	case Condition::OPERATOR_EQUAL:
 		return content == myContent;
@@ -119,7 +119,7 @@ void API::dropTable(string tableName){
         return;
     vector<string> indexNameVector;
 
-    //get all indexs in the table, and drop them all
+    //获取表中的所有索引，然后删除它们
     getIndexNameList(tableName, &indexNameVector);
     for (int i = 0; i < indexNameVector.size(); i++){
         cout << indexNameVector[i];    
@@ -132,7 +132,7 @@ void API::dropTable(string tableName){
         cm->dropTable(tableName);
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "Query OK, table " << tableName << " affected.(" << duration << " s)"<< endl;
+        cout << "查询完毕, 表 " << tableName << " 已被删除.(" << duration << " s)"<< endl;
     }
 }
 
@@ -140,30 +140,30 @@ void API::dropIndex(string indexName){
     if (cm->findIndex(indexName) != INDEX_FILE){
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "There is no index " << indexName <<".("<< duration <<" s)"<< endl;
+        cout << "没有索引 " << indexName <<".("<< duration <<" s)"<< endl;
         return;
     }
     
-    //delete a index file
+    //删除索引文件
     if (rm->dropIndex(indexName)){
         //get type of index
         int indexType = cm->getIndexType(indexName);
         if (indexType == -2){
 			clock_t finish = clock();
 			double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-            cout << "Error!("<<duration <<" s)" << endl;
+            cout << "错误!("<<duration <<" s)" << endl;
             return;
         }
 
-        //delete a index information
+        //删除索引信息
         cm->dropIndex(indexName);
         
-        //delete a index tree
+        //删除索引树
         im->dropIndex(rm->getIndexFileName(indexName), indexType);
 
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "Query OK, index " << indexName << " affected.(" << duration << " s)" << endl;
+		cout << "查询完毕, 索引 " << indexName << " 已被删除.(" << duration << " s)" << endl;
     }
 }
 
@@ -171,7 +171,7 @@ void API::createIndex(string indexName, string tableName, string attributeName){
     if (cm->findIndex(indexName) == INDEX_FILE){
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "There is index " << indexName << " already.(" <<duration <<" s)"<< endl;
+        cout << "已经存在索引 " << indexName << " .(" <<duration <<" s)"<< endl;
         return;
     }
     
@@ -187,7 +187,7 @@ void API::createIndex(string indexName, string tableName, string attributeName){
             if (!attributeVector[i].getUnique()){
 				clock_t finish = clock();
 				double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-                cout << "The attribute is not unique.("<<duration<<" s)" << endl;
+                cout << "属性不是唯一的.("<<duration<<" s)" << endl;
                 return;
             }
             type = attributeVector[i].getType();
@@ -198,38 +198,38 @@ void API::createIndex(string indexName, string tableName, string attributeName){
     if (i == attributeVector.size()){
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "There is not this attribute in the table.("<<duration<<" s)" << endl;
+        cout << "表中没有这个属性.("<<duration<<" s)" << endl;
         return;
     }
     
-     //RecordManager to create a index file
+     //创建索引文件
     if (rm->createIndex(indexName)){
-        //CatalogManager to add a index information
+        //CatalogManager来添加索引信息
         cm->addIndex(indexName, tableName, attributeName, type);
         
-        //get type of index
+        //获取索引类型
         int indexType = cm->getIndexType(indexName);
         if (indexType == -2){
 			clock_t finish = clock();
 			double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-            cout << "Error!("<<duration<<" s)" << endl;
+            cout << "错误!("<<duration<<" s)" << endl;
             return;
         }
         
-        //indexManager to create a index tress
+        //创建一个索引树
         im->createIndex(rm->getIndexFileName(indexName), indexType);
         
-        //recordManager insert already record to index
+        //recordManager将已经记录插入索引
         rm->indexRecordAllAlreadyInsert(tableName, indexName);
 
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "Query OK, index " << indexName << " affected.(" << duration << " s)" << endl;
+		cout << "查询完毕, 索引 " << indexName << " 已被插入.(" << duration << " s)" << endl;
     }
     else{
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "Create index " << indexName << " fail.("<<duration<<" s)" << endl;
+        cout << "创建索引 " << indexName << " 失败.("<<duration<<" s)" << endl;
     }
 }
 
@@ -237,21 +237,21 @@ void API::createTable(string tableName, vector<Attribute>* attributeVector, stri
     if(cm->findTable(tableName) == TABLE_FILE){
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "There is a table " << tableName << " already.("<<duration<<" s)" << endl;
+        cout << "已经存在表 " << tableName << " .("<<duration<<" s)" << endl;
         return;
     }
     
-    //RecordManager to create a table file
+    //创建表文件
     if(rm->createTable(tableName)){
-        //CatalogManager to create a table information
+        //CatalogManager来创建表信息
         cm->addTable(tableName, attributeVector, primaryKeyName, primaryKeyLocation);
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "Query OK, table " << tableName << " affected.(" << duration << " s)" << endl;
+		cout << "查询完毕, 表 " << tableName << " 已被创建.(" << duration << " s)" << endl;
     }
     
     if (primaryKeyName != ""){
-        //get a primary key
+        //获取主键
         string indexName = getPrimaryIndex(tableName);
         createIndex(indexName, tableName, primaryKeyName);
     }
@@ -286,7 +286,7 @@ void API::showRecord(string tableName, vector<string>* attributeNameVector, vect
             if (i == attributeVector.size()){
 				clock_t finish = clock();
 				double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-                cout << "The attribute which you want to print is not exist in the table.("<<duration<<" s)" << endl;
+                cout << "要打印的属性在表中不存在.("<<duration<<" s)" << endl;
                 return;
             }
         }
@@ -307,15 +307,15 @@ void API::showRecord(string tableName, vector<string>* attributeNameVector, vect
                 if (i == attributeVector.size()){
 					clock_t finish = clock();
 					double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-                    cout << "The attribute is not exist in the table.("<< duration<<" s)"<< endl;
+                    cout << "该属性在表中不存在.("<< duration<<" s)"<< endl;
                     return;
                 }
             }
         }
-		//calculate the max length of the values and attributes
+		//计算值和属性的最大长度
 		length = rm->recordLength(tableName, attributeNameVector, conditionVector, blockOffset);	
 		
-        //print all the attributes you want to show
+        //打印您想要显示的所有属性
         tableAttributePrint(attributeNameVector);
     
         if (blockOffset == -1){
@@ -323,18 +323,18 @@ void API::showRecord(string tableName, vector<string>* attributeNameVector, vect
             num = rm->recordAllShow(tableName, attributeNameVector,conditionVector);
         }
         else{
-            //find the block by index,search in the block
+            //按索引查找块，在块中搜索
             num = rm->recordBlockShow(tableName, attributeNameVector, conditionVector, blockOffset);
         }
 
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "Query OK, "<<num<<"records affected. ("<< duration << " s)" << endl;
+		cout << "查询完毕, "<<num<<"记录被更改. ("<< duration << " s)" << endl;
     }
     else{
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "There is no table named " << tableName <<".("<<duration<<" s)"<< endl;
+        cout << "没有此表 " << tableName <<".("<<duration<<" s)"<< endl;
     }
 
 	length = 0; //prepare for next query
@@ -351,18 +351,18 @@ void API::insertRecord(string tableName, vector<string>* recordContent){
     for (int i = 0 ; i < attributeVector.size(); i++){
         indexName = attributeVector[i].getIndex();
         if (indexName != ""){
-            //if the attribute has a index
+            //如果属性有索引
             int blockoffest = im->searchIndex(rm->getIndexFileName(indexName), (*recordContent)[i], attributeVector[i].getType());
             if (blockoffest != -1){
-                //if the value has exist in index tree then fail to insert the record
+                //如果该值已经存在于索引树中，则不能插入记录
 				clock_t finish = clock();
 				double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-                cout << "insert fail because index value exist.("<<duration<<" s)" << endl;
+                cout << "由于索引值存在，插入失败.("<<duration<<" s)" << endl;
                 return;
             }
         }
         else if (attributeVector[i].getUnique()){
-            //if the attribute is unique but not index
+            //如果属性是唯一的，但不是索引
             Condition condition(attributeVector[i].getName(), (*recordContent)[i], Condition::OPERATOR_EQUAL);
             conditionVector.insert(conditionVector.end(), condition);
         }
@@ -376,7 +376,7 @@ void API::insertRecord(string tableName, vector<string>* recordContent){
             if (recordConflictNum > 0) {
 				clock_t finish = clock();
 				double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-                cout << "insert fail because unique value exist.("<<duration<<" s)" << endl;
+                cout << "插入失败，因为存在唯一值.("<<duration<<" s)" << endl;
                 return;
             }
         }
@@ -385,10 +385,10 @@ void API::insertRecord(string tableName, vector<string>* recordContent){
     char recordString[2000];
     memset(recordString, 0, 2000);
     
-    //CatalogManager to get the record string
+    //CatalogManager来获取记录字符串
     cm->getRecordString(tableName, recordContent, recordString);
     
-    //RecordManager to insert the record into file; and get the position of block being insert
+    //将记录插入文件;然后得到块被插入的位置
     int recordSize = cm->calcuteLenth(tableName);
     int blockOffset = rm->insertRecord(tableName, recordString, recordSize);
     
@@ -397,12 +397,12 @@ void API::insertRecord(string tableName, vector<string>* recordContent){
         cm->insertRecord(tableName, 1);
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "Query OK, table " << tableName << " affected.(" << duration << " s)" << endl;
+		cout << "查询完毕, 表 " << tableName << " 已被插入记录.(" << duration << " s)" << endl;
     }
     else{
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "Insert record into table " << tableName << " fail.("<<duration<<" s)" << endl;
+        cout << "向表 " << tableName << " 插入数据失败.("<<duration<<" s)" << endl;
     }
 }
 
@@ -431,19 +431,19 @@ void API::deleteRecord(string tableName, vector<Condition>* conditionVector){
         }
     }
     if (blockOffset == -1){
-        //if we con't find the block by index,we need to find all block
+        //如果我们不能通过索引找到块，我们需要找到所有块
         num = rm->recordAllDelete(tableName, conditionVector);
     }
     else{
-        //find the block by index,search in the block
+        //按索引查找块，在块中搜索
         num = rm->recordBlockDelete(tableName, conditionVector, blockOffset);
     }
     
-    //delete the number of record in in the table
+    //删除表中记录的数量
     cm->deleteValue(tableName, num);
 	clock_t finish = clock();
 	double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-	cout << "Query OK, " << num << " records in table "<< tableName<<"affected.(" << duration << " s)" << endl;
+	cout << "查询完毕, 在表 "<< tableName<<"的数据"<< num <<"已被更改.(" << duration << " s)" << endl;
 }
 
 int API::getRecordNum(string tableName){
@@ -501,7 +501,7 @@ void API::insertRecordIndex(char* recordBegin,int recordSize, vector<Attribute>*
 void API::insertIndex(string indexName, char* contentBegin, int type, int blockOffset){
     string content= "";
     stringstream tmp;
-    //if the attribute has index
+    //如果属性有索引
     if (type == Attribute::TYPE_INT){
         int value = *((int*)contentBegin);
         tmp << value;
@@ -531,7 +531,7 @@ void API::deleteRecordIndex(char* recordBegin,int recordSize, vector<Attribute>*
         stringstream tmp;
         
         if ((*attributeVector)[i].getIndex() != ""){
-            //if the attribute has index
+            //如果属性有索引
             if (type == Attribute::TYPE_INT){
                 int value = *((int*)contentBegin);
                 tmp << value;
@@ -561,7 +561,7 @@ int API::tableExist(string tableName){
     if (cm->findTable(tableName) != TABLE_FILE){
 		clock_t finish = clock();
 		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
-        cout << "There is no table named " << tableName<<".("<<duration<<" s)" << endl;
+        cout << "没有此表 " << tableName<<".("<<duration<<" s)" << endl;
         return 0;
     }
     
