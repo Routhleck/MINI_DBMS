@@ -5,11 +5,11 @@
 using namespace std;
 
 Interpreter::Interpreter(){
-	//default ctor
+	//创建interpreter
 }
 
 Interpreter::~Interpreter(){
-	//default dtor
+	//删除interpreter
 }
 
 int Interpreter::interpret(string s){
@@ -18,7 +18,7 @@ int Interpreter::interpret(string s){
 
 	command = getCommand(s, tmp);
 
-	//create operation
+	//创建命令
 	if(command == "create"){
         command = getCommand(s, tmp);
 
@@ -46,7 +46,7 @@ int Interpreter::interpret(string s){
 					string attributeName = command;
 					int type = 0;
 					bool ifUnique = false;
-					// deal with the data type
+					// 处理数据类型
 					command = getCommand(s, tmp);
 					if(command == "int"){
 						type = 0;
@@ -193,7 +193,7 @@ int Interpreter::interpret(string s){
 		return 0;
 	}
 
-	//select operation
+	//选择命令
 	else if(command == "select"){
 		vector<string> attrSelected;
 		string tableName = "";
@@ -220,7 +220,7 @@ int Interpreter::interpret(string s){
 			return 0;
 		}
 
-		// condition extricate
+		// 条件解除
 		command = getCommand(s, tmp);
 		if(command.empty()){
 			if(attrSelected.size() == 0){
@@ -287,7 +287,7 @@ int Interpreter::interpret(string s){
 		}
 	}
 
-	//drop operation
+	//DROP
 	else if(command == "drop"){
 		command = getCommand(s, tmp);
 
@@ -319,7 +319,7 @@ int Interpreter::interpret(string s){
 		}
 	}
 
-	//delete operation
+	//DELETE
 	else if(command == "delete"){
 		string tableName = "";
 		command = getCommand(s, tmp);
@@ -391,7 +391,7 @@ int Interpreter::interpret(string s){
 		}
 	}
 
-	//insert operation
+	//INSERT
 	else if(command == "insert"){
 		string tableName = "";
 		std::vector<string> valueVector;
@@ -427,17 +427,17 @@ int Interpreter::interpret(string s){
 		return 1;
 	}
 
-	//quit minisql program
+	//退出
 	else if(command == "quit" || command == "exit"){ 
 		return -1;
 	}
 
-	//help information
+	//HELP帮助
 	else if (command == "help") {
 		return -2;
 	}
 
-	//execute operation
+	//运行程序
 	else if(command == "execfile"){
 		fileName = getCommand(s, tmp);
 		cout << "try to open file " << fileName << "." << endl;
@@ -456,12 +456,12 @@ string Interpreter::getCommand(string s, int &tmp){
     string command;
     int index1, index2;
 
-	//get the first index of the word
+	//获取单词的第一个下标
 	while ((s[tmp] == ' ' || s[tmp] == '\n'  || s[tmp] == '\t') && s[tmp] != 0)
 		tmp++;
 	index1 = tmp;
 
-	//get the next index of the word
+	//获取下一个单词的第一个下标
 	if(s[tmp] == '(' || s[tmp] == ',' || s[tmp] == ')'){
 		tmp++;
 		index2 = tmp;
