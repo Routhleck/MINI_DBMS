@@ -73,10 +73,8 @@ int main(){
 			else if (status == -2) {
                 //帮助信息
 				cout << "仅支持 int \ float \ char(n)." << endl;
-				cout << "A table supports at most 32 attributes." << endl;
-				cout << "You can use create, drop, delete, insert, select operations." << endl;
-				cout << "You can input 'execfile' to implement a file." << endl;
-				cout << "If you want to quit, input 'quit' or 'exit'." << endl;
+				cout << "可以使用create, drop, delete, insert, select命令." << endl;
+				cout << "输入 'quit' 或 'exit'来退出." << endl;
 			}
             else if(status==-1){
                 //退出SQL
