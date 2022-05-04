@@ -354,10 +354,11 @@ int Interpreter::interpret(string s){
 		}
 	}
 
-	//DROP
+	//删除表或索引
 	else if(command == "drop"){
 		command = getCommand(s, tmp);
 
+		//删除表
 		if(command == "table"){
 			command = getCommand(s, tmp);
 			if(!command.empty()){
@@ -365,10 +366,12 @@ int Interpreter::interpret(string s){
 				return 1;
 			}
 			else{
+				//异常处理:空值
 				cout << "Syntax Error!" << endl;
 				return 1;
 			}
 		}
+		//删除索引
 		else if(command == "index"){
 			command = getCommand(s, tmp);
 			if(!command.empty()){
@@ -376,52 +379,62 @@ int Interpreter::interpret(string s){
 				return 1;
 			}
 			else{
+				//异常处理:空值
 				cout << "Syntax Error!" << endl;
 				return 1;
 			}
 		}
 		else{
+			//异常处理:错误关键字
 			cout << "Syntax Error!" << endl;
 			return 0;
 		}
 	}
 
-	//DELETE
+	//删除属性值——列
 	else if(command == "delete"){
+		//tableName初始化
 		string tableName = "";
 		command = getCommand(s, tmp);
+		//异常处理:from缺失
 		if(command != "from"){
 			cout << "Syntax Error!" << endl;
 			return 0;
 		}
 
 		command = getCommand(s, tmp);
+		//赋值tableName表名
 		if(!command.empty())
 			tableName = command;
 		else{
+			//异常处理:空值
 			cout << "Syntax Error!" << endl;
 			return 0;
 		}
 
-		// condition extricate
 		command = getCommand(s, tmp);
+		//调用API删除记录
 		if(command.empty()){
 			api->deleteRecord(tableName);
 			return 1;
 		}
+		//Where关键字处理
 		else if(command == "where"){
+			//初始化attributeName,value,operate为equal情况
 			string attributeName = "";
 			string value = "";
 			int operate = Condition::OPERATOR_EQUAL;
 			std::vector<Condition> conditionVector;
-			command = getCommand(s, tmp);		//col1
+			command = getCommand(s, tmp);
 			while(1){
 				try {
+					//异常处理:ex:语法错误
 					logic_error ex("Syntax Error!");
 					if(command.empty())
 						throw exception(ex);
 					attributeName = command ;
 					command = getCommand(s, tmp);
+					//各种比较运算,主要为vector类型数据比较服务
 					if(command == "<=")
 						operate = Condition::OPERATOR_LESS_EQUAL;
 					else if(command == ">=")
@@ -437,14 +450,18 @@ int Interpreter::interpret(string s){
 					else
 						throw exception(ex);
 					command = getCommand(s, tmp);
-					if(command.empty()) // no condition
+					//异常处理:空值
+					if(command.empty())
 						throw exception(ex);
 					value = command;
 					command = getCommand(s, tmp);
+					//Condition c比较
 					Condition c(attributeName, value, operate);
 					conditionVector.push_back(c);
+					//读取完成,break
 					if(command.empty()) // no condition
 						break;
+					//and 关键字,则继续读取
 					if(command != "and")
 						throw  exception(ex);;
 					command = getCommand(s, tmp);
@@ -453,18 +470,22 @@ int Interpreter::interpret(string s){
 					return 0;
 				}
 			}
+			//调用API删除记录
 			api->deleteRecord(tableName, &conditionVector);
 			return 1;
 		}
 	}
 
-	//INSERT
+	//插入记录
 	else if(command == "insert"){
+		//初始化tableName,string向量
 		string tableName = "";
 		std::vector<string> valueVector;
 		command = getCommand(s, tmp);
 		try {
+			//异常处理:语法错误
 			logic_error ex("Syntax Error!");
+			//异常行为:into缺失，空值，value缺失，左括号缺失，右括号缺失
 			if(strcmp(command.c_str(),"into") != 0)
 				throw  exception(ex);
 			command = getCommand(s, tmp);
@@ -481,15 +502,18 @@ int Interpreter::interpret(string s){
 			while (!command.empty() && command != ")"){
 				valueVector.push_back(command);
 				command = getCommand(s, tmp);
-				if(command == ",")  // bug here
+				//多值读取,缺少错误读取容错
+				if(command == ",")  
 					command = getCommand(s, tmp);
 			}
+			//异常处理:	缺少右括号
 			if(command != ")")
 				throw  exception(ex);
 		} catch (exception&){
 			cout << "Syntax Error!" << endl;
 			return 0;
 		}
+		//调用API插入记录
 		api->insertRecord(tableName, &valueVector);
 		return 1;
 	}
@@ -534,23 +558,25 @@ string Interpreter::getCommand(string s, int &tmp){
 		index2 = tmp;
 		command = s.substr(index1, index2 - index1);
 	}
-
+	//若出现'\'转义符处理
 	else if(s[tmp] == '\''){
 		tmp++;
 		while (s[tmp] != '\'' && s[tmp] !=0)
 			tmp++;
-
+		//'\\'情况
 		if(s[tmp] == '\''){
 			index1++;
 			index2 = tmp;
 			tmp++;
 			command = s.substr(index1, index2 - index1);
 		}
+		//'\'后为其他字符
 		else
 			command = "";
 	}
 
 	else{
+		//正常读取
 		while (s[tmp] != ' ' &&s[tmp] != '(' && s[tmp] != '\n' 
                 && s[tmp] != 0 && s[tmp] != ')' && s[tmp] != ',')
 			tmp++;
@@ -566,10 +592,11 @@ string Interpreter::getCommand(string s, int &tmp){
     return command;
 }
 
+//获取文件名
 string Interpreter::getFilename() {
 	return fileName;
 }
-
+//设置API接口
 void Interpreter::setAPI(API* apiInput) {
 	api = apiInput;
 }
