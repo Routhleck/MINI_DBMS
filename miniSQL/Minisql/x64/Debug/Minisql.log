@@ -1,1 +1,10 @@
-﻿  Minisql.vcxproj -> D:\cpp_sourcecode\project\0504\MINISQL-master\MINISQL-master\MINISQL\miniSQL\x64\Debug\Minisql.exe
+﻿  Interpreter.cpp
+C:\Users\18314\Desktop\MINI_DBMS\miniSQL\src\IndexManager.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  main.cpp
+C:\Users\18314\Desktop\MINI_DBMS\miniSQL\src\IndexManager.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+C:\Users\18314\Desktop\MINI_DBMS\miniSQL\src\main.cpp(47,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+C:\Users\18314\Desktop\MINI_DBMS\miniSQL\src\main.cpp(95,13): warning C4129: “ ”: 不可识别的字符转义序列
+C:\Users\18314\Desktop\MINI_DBMS\miniSQL\src\main.cpp(20,7): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\18314\Desktop\MINI_DBMS\miniSQL\src\main.cpp(23,8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  正在生成代码...
+  Minisql.vcxproj -> C:\Users\18314\Desktop\MINI_DBMS\miniSQL\x64\Debug\Minisql.exe
