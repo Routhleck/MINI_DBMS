@@ -16,7 +16,7 @@ CatalogManager::~CatalogManager() {
 }
 
 int CatalogManager::dropTable(string tableName) {
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	bm.deleteFileNode(tableFileName.c_str());
 	if (remove(tableFileName.c_str()))
 		return 0;
@@ -24,7 +24,7 @@ int CatalogManager::dropTable(string tableName) {
 }
 
 int CatalogManager::getIndexType(string indexName) {
-	fileNode *ftmp = bm.getFile("INDEX_FILE");
+	fileNode *ftmp = bm.getFile("文件索引");
 	blockNode *btmp = bm.getBlockHead(ftmp);
 	if (btmp) {
 		char* addressBegin;
@@ -42,7 +42,7 @@ int CatalogManager::getIndexType(string indexName) {
 }
 
 int CatalogManager::getAllIndex(vector<IndexInfo> * indexs) {
-	fileNode *ftmp = bm.getFile("INDEX_FILE");
+	fileNode *ftmp = bm.getFile("文件索引");
 	blockNode *btmp = bm.getBlockHead(ftmp);
 	if (btmp) {
 		char* addressBegin;
@@ -57,7 +57,7 @@ int CatalogManager::getAllIndex(vector<IndexInfo> * indexs) {
 }
 
 int CatalogManager::addIndex(string indexName, string tableName, string Attribute, int type) {
-	fileNode *ftmp = bm.getFile("INDEX_FILE");
+	fileNode *ftmp = bm.getFile("文件索引");
 	blockNode *btmp = bm.getBlockHead(ftmp);
 	IndexInfo i(indexName, tableName, Attribute, type);
 	while (true) {
@@ -82,7 +82,7 @@ int CatalogManager::addIndex(string indexName, string tableName, string Attribut
 
 int CatalogManager::findTable(string tableName) {
 	FILE *fp;
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fp = fopen(tableFileName.c_str(), "r");
 	if (fp == NULL) {
 		return 0;
@@ -94,7 +94,7 @@ int CatalogManager::findTable(string tableName) {
 }
 
 int CatalogManager::findIndex(string fileName) {
-	fileNode *ftmp = bm.getFile("INDEX_FILE");
+	fileNode *ftmp = bm.getFile("文件索引");
 	blockNode *btmp = bm.getBlockHead(ftmp);
 	if (btmp) {
 		char* addressBegin;
@@ -114,7 +114,7 @@ int CatalogManager::findIndex(string fileName) {
 }
 
 int CatalogManager::dropIndex(string index) {
-	fileNode *ftmp = bm.getFile("INDEX_FILE");
+	fileNode *ftmp = bm.getFile("文件索引");
 	blockNode *btmp = bm.getBlockHead(ftmp);
 	if (btmp) {
 		char* addressBegin;
@@ -140,7 +140,7 @@ int CatalogManager::dropIndex(string index) {
 }
 
 int CatalogManager::revokeIndexOnAttribute(string tableName, string AttributeName, string indexName) {
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
 
@@ -158,8 +158,8 @@ int CatalogManager::revokeIndexOnAttribute(string tableName, string AttributeNam
 					bm.setDirty(*btmp);
 				}
 				else {
-					cout << "revoke unknown index: " << indexName << " on " << tableName << "!" << endl;
-					cout << "Attribute: " << AttributeName << " on table " << tableName << " has index: " << a->getIndex() << "!" << endl;
+					cout << "撤销未知索引: " << indexName << " on " << tableName << "!" << endl;
+					cout << "属性: " << AttributeName << " on 表 " << tableName << " 有索引: " << a->getIndex() << "!" << endl;
 				}
 				break;
 			}
@@ -174,7 +174,7 @@ int CatalogManager::revokeIndexOnAttribute(string tableName, string AttributeNam
 }
 
 int CatalogManager::getIndexNameList(string tableName, vector<string>* indexNameVector) {
-	fileNode *ftmp = bm.getFile("INDEX_FILE");
+	fileNode *ftmp = bm.getFile("文件索引");
 	blockNode *btmp = bm.getBlockHead(ftmp);
 	if (btmp) {
 		char* addressBegin;
@@ -192,7 +192,7 @@ int CatalogManager::getIndexNameList(string tableName, vector<string>* indexName
 }
 
 int CatalogManager::deleteValue(string tableName, int deleteNum) {
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
 
@@ -200,7 +200,7 @@ int CatalogManager::deleteValue(string tableName, int deleteNum) {
 		char* addressBegin = bm.getContent(*btmp);
 		int * recordNum = (int*)addressBegin;
 		if ((*recordNum) <deleteNum) {
-			cout << "error in CatalogManager::deleteValue" << endl;
+			cout << "CatalogManager出现错误::删除数据" << endl;
 			return 0;
 		}
 		else
@@ -213,7 +213,7 @@ int CatalogManager::deleteValue(string tableName, int deleteNum) {
 }
 
 int CatalogManager::insertRecord(string tableName, int recordNum) {
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
 
@@ -228,7 +228,7 @@ int CatalogManager::insertRecord(string tableName, int recordNum) {
 }
 
 int CatalogManager::getRecordNum(string tableName) {
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
 
@@ -242,7 +242,7 @@ int CatalogManager::getRecordNum(string tableName) {
 
 int CatalogManager::addTable(string tableName, vector<Attribute>* attributeVector, string primaryKeyName = "", int primaryKeyLocation = 0) {
 	FILE *fp;
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fp = fopen(tableFileName.c_str(), "w+");
 	if (fp == NULL)
 		return 0;
@@ -272,7 +272,7 @@ int CatalogManager::addTable(string tableName, vector<Attribute>* attributeVecto
 }
 
 int CatalogManager::setIndexOnAttribute(string tableName, string AttributeName, string indexName) {
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
 
@@ -300,7 +300,7 @@ int CatalogManager::setIndexOnAttribute(string tableName, string AttributeName, 
 }
 
 int CatalogManager::getAttribute(string tableName, vector<Attribute>* attributeVector) {
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
 
@@ -321,7 +321,7 @@ int CatalogManager::getAttribute(string tableName, vector<Attribute>* attributeV
 }
 
 int CatalogManager::calcuteLenth(string tableName) {
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
 
@@ -343,7 +343,7 @@ int CatalogManager::calcuteLenth(string tableName) {
 				singleRecordSize += (*a).getType() * sizeof(char);
 			}
 			else {
-				cout << "Catalog data damaged!" << endl;
+				cout << "目录数据损坏！" << endl;
 				return 0;
 			}
 			a++;
@@ -366,7 +366,7 @@ int CatalogManager::calcuteLenth(int type) {
 // Get the record string of a table by the table name and recordContent, write the result to the recordResult reference.
 void CatalogManager::getRecordString(string tableName, vector<string>* recordContent, char* recordResult) {
 	vector<Attribute> attributeVector;
-	string tableFileName = "TABLE_CATALOG_" + tableName;
+	string tableFileName = "表目录" + tableName;
 	getAttribute(tableName, &attributeVector);
 	char * contentBegin = recordResult;
 
