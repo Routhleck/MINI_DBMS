@@ -13,7 +13,7 @@ RecordManager::~RecordManager() {
 }
 
 int RecordManager::createTable(string tableName){
-    string tableFileName = getTableFileName(tableName); //get the table file name to open 
+    string tableFileName = getTableFileName(tableName); //获取要打开的表文件名
     
     FILE *fp;
     fp = fopen(tableFileName.c_str(), "a+");
@@ -107,7 +107,7 @@ int RecordManager::recordBlockShow(string tableName, vector<string>* attributeNa
 }
 
 int RecordManager::recordBlockShow(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, blockNode* block){
-    //if block is null, return -1
+    //如果块为空，则返回-1
     if (block == NULL)
         return -1;
     
@@ -125,7 +125,7 @@ int RecordManager::recordBlockShow(string tableName, vector<string>* attributeNa
 		return count;
 	cout << "* ";
     while (recordBegin - blockBegin  < usingSize){
-        //if the recordBegin point to a record
+        //如果recordBegin指向一个记录
         if(recordConditionFit(recordBegin, recordSize, &attributeVector, conditionVector)){
             count ++;
             recordPrint(recordBegin, recordSize, &attributeVector, attributeNameVector);
@@ -167,7 +167,7 @@ int RecordManager::recordAllFind(string tableName, vector<Condition>* conditionV
 }
 
 int RecordManager::recordBlockFind(string tableName, vector<Condition>* conditionVector, blockNode* block){
-    //if block is null, return -1
+    //如果块为空，则返回-1
     if (block == NULL)
         return -1;
     int count = 0;
@@ -179,7 +179,7 @@ int RecordManager::recordBlockFind(string tableName, vector<Condition>* conditio
     api->getAttribute(tableName, &attributeVector);
     
     while (recordBegin - bm.getContent(*block)  < bm.getUsingSize(*block)){
-        //if the recordBegin point to a record
+        //如果recordBegin指向一个记录
         if(recordConditionFit(recordBegin, recordSize, &attributeVector, conditionVector))
             count++;
         
@@ -223,7 +223,7 @@ int RecordManager::recordBlockDelete(string tableName,  vector<Condition>* condi
 }
 
 int RecordManager::recordBlockDelete(string tableName,  vector<Condition>* conditionVector, blockNode* block){
-    //if block is null, return -1
+    //如果块为空，则返回-1
     if (block == NULL)
         return -1;
     int count = 0;
@@ -235,7 +235,7 @@ int RecordManager::recordBlockDelete(string tableName,  vector<Condition>* condi
     api->getAttribute(tableName, &attributeVector);
     
     while (recordBegin - bm.getContent(*block) < bm.getUsingSize(*block)){
-        //if the recordBegin point to a record
+        //如果recordBegin指向一个记录
         if(recordConditionFit(recordBegin, recordSize, &attributeVector, conditionVector)){
             count ++;
             
@@ -278,7 +278,7 @@ int RecordManager::indexRecordAllAlreadyInsert(string tableName,string indexName
 }
 
 int RecordManager::indexRecordBlockAlreadyInsert(string tableName,string indexName,  blockNode* block){
-    //if block is null, return -1
+    //如果块为空，则返回-1
     if (block == NULL)
         return -1;
     int count = 0;
@@ -295,12 +295,12 @@ int RecordManager::indexRecordBlockAlreadyInsert(string tableName,string indexNa
     
     while (recordBegin - bm.getContent(*block)  < bm.getUsingSize(*block)){
         contentBegin = recordBegin;
-        //if the recordBegin point to a record
+        //如果recordBegin指向一个记录
         for (int i = 0; i < attributeVector.size(); i++){
             type = attributeVector[i].getType();
             typeSize = api->getTypeSize(type);
             
-            //find the index  of the record, and insert it to index tree
+            //找到记录的索引，并将其插入索引树
             if (attributeVector[i].getIndex()==indexName){
                 api->insertIndex(indexName, contentBegin, type, block->offsetNum);
                 count++;
@@ -329,14 +329,14 @@ bool RecordManager::recordConditionFit(char* recordBegin,int recordSize, vector<
         attributeName = (*attributeVector)[i].getName();
         typeSize = api->getTypeSize(type);
         
-        //init content (when content is string , we can get a string easily)
+        //初始化内容(当内容是字符串时，我们可以很容易地得到一个字符串)
         memset(content, 0, 255);
         memcpy(content, contentBegin, typeSize);
         for(int j = 0; j < (*conditionVector).size(); j++){
             if ((*conditionVector)[j].getAttributeName() == attributeName){
-                //if this attribute need to deal about the condition
+                //如果这个属性需要处理条件
                 if(!contentConditionFit(content, type, &(*conditionVector)[j])){
-                    //if this record is not fit the conditon
+                    //如果此记录不符合条件
                     return false;
                 }
             }
@@ -358,7 +358,7 @@ void RecordManager::recordPrint(char* recordBegin, int recordSize, vector<Attrib
         type = (*attributeVector)[i].getType();
         typeSize = api->getTypeSize(type);
         
-        //init content (when content is string , we can get a string easily)
+        //初始化内容(当内容是字符串时，我们可以很容易地得到一个字符串)
         memset(content, 0, 255);
         memcpy(content, contentBegin, typeSize);
 
@@ -375,8 +375,8 @@ void RecordManager::recordPrint(char* recordBegin, int recordSize, vector<Attrib
 
 void RecordManager::contentPrint(char * content, int type){
     if (type == Attribute::TYPE_INT){
-        //if the content is a int
-        int tmp = *((int *) content);   //get content value by point
+        //如果内容是int类型
+        int tmp = *((int *) content);   //按点获取内容值
 		cout << tmp;
 		stringstream ss;
 		ss << tmp;
@@ -387,8 +387,8 @@ void RecordManager::contentPrint(char * content, int type){
 		cout << "* ";
     }
     else if (type == Attribute::TYPE_FLOAT){
-        //if the content is a float
-        float tmp = *((float *) content);   //get content value by point
+        //如果内容是float类型 
+        float tmp = *((float *) content);   //按点获取内容值
 		cout << tmp;
 		stringstream ss;
 		ss << tmp;
@@ -399,7 +399,7 @@ void RecordManager::contentPrint(char * content, int type){
 		cout << "* ";
     }
     else{
-        //if the content is a string
+        //如果内容是string类型
         string tmp = content;
 		cout << tmp;
 		for (int j = 0; j < api->getLength() + 2 - tmp.size(); j++)
@@ -410,17 +410,17 @@ void RecordManager::contentPrint(char * content, int type){
 
 bool RecordManager::contentConditionFit(char* content,int type,Condition* condition){
     if (type == Attribute::TYPE_INT){
-        //if the content is a int
-        int tmp = *((int *) content);   //get content value by point
+        //如果内容是int类型
+        int tmp = *((int *) content);   //按点获取内容值
         return condition->FitAttribute(tmp);
     }
     else if (type == Attribute::TYPE_FLOAT){
-        //if the content is a float
-        float tmp = *((float *) content);   //get content value by point
+        //如果内容是float类型
+        float tmp = *((float *) content);   //按点获取内容值
         return condition->FitAttribute(tmp);
     }
     else{
-        //if the content is a string
+        //如果内容是string类型
         return condition->FitAttribute(content);
     }
     return true;
@@ -445,7 +445,7 @@ int RecordManager::recordLength(string tableName, vector<string>* attributeNameV
 	fileNode *ftmp = bm.getFile(getTableFileName(tableName).c_str());
 	blockNode* block = bm.getBlockByOffset(ftmp, blockOffset);
 
-	//if block is null, return -1
+	//如果块为空，则返回-1
 	if (block == NULL)
 		return -1;
 	int length = 0;
@@ -459,7 +459,7 @@ int RecordManager::recordLength(string tableName, vector<string>* attributeNameV
 	size_t usingSize = bm.getUsingSize(*block);
 
 	while (recordBegin - blockBegin  < usingSize) {
-		//if the recordBegin point to a record
+		//如果recordBegin指向一个记录
 		if (recordConditionFit(recordBegin, recordSize, &attributeVector, conditionVector)) {
 			int lentmp = recordRowLength(recordBegin, recordSize, &attributeVector, attributeNameVector);
 			if (lentmp > length)
@@ -483,15 +483,15 @@ int RecordManager::recordRowLength(char* recordBegin, int recordSize, vector<Att
 		type = (*attributeVector)[i].getType();
 		typeSize = api->getTypeSize(type);
 
-		//init content
+		//初始化内容
 		memset(content, 0, 255);
 		memcpy(content, contentBegin, typeSize);
 
 		for (int j = 0; j < (*attributeNameVector).size(); j++) {
 			if ((*attributeNameVector)[j] == (*attributeVector)[i].getName()) {
 				if (type == Attribute::TYPE_INT) {
-					//if the content is a int
-					int tmp = *((int *)content);   //get content value by point
+					//如果内容是int类型
+					int tmp = *((int *)content);   //按点获取内容值
 					string stmp;
 					stringstream ss;
 					ss << tmp;
@@ -500,8 +500,8 @@ int RecordManager::recordRowLength(char* recordBegin, int recordSize, vector<Att
 					length = stmp.size();
 				}
 				else if (type == Attribute::TYPE_FLOAT) {
-					//if the content is a float
-					float tmp = *((float *)content);   //get content value by point
+					//如果内容是float类型 
+					float tmp = *((float *)content);   //按点获取内容值
 					string stmp;
 					stringstream ss;
 					ss << tmp;
@@ -510,7 +510,7 @@ int RecordManager::recordRowLength(char* recordBegin, int recordSize, vector<Att
 						length = stmp.size();
 				}
 				else {
-					//if the content is a string
+					//如果内容是string类型 
 					string tmp = content;
 					if (tmp.size() > length)
 						length = tmp.size();
