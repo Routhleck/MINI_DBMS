@@ -19,35 +19,35 @@ public:
 	RecordManager();
 	~RecordManager();
     
-    int createTable(string tableName); //create table to initialize the records 
-    int dropTable(string tableName); //drop a table and all reocrds
-    int dropIndex(string indexName); //drop a index on attribute
-    int createIndex(string indexName); //create a index on attribute
-	int insertRecord(string tableName, char* record, int recordSize); //insert reocrds into table
-    int recordAllShow(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector); //show all records for select
-    int recordBlockShow(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, int blockOffset); //show designed records for select
-    int recordAllFind(string tableName, vector<Condition>* conditionVector); //find records of a table
-    int recordAllDelete(string tableName, vector<Condition>* conditionVector); //delete all records of a table
-    int recordBlockDelete(string tableName,  vector<Condition>* conditionVector, int blockOffset); //delete records block in the memory
-    int indexRecordAllAlreadyInsert(string tableName,string indexName); //make index for records already in table
-    string getTableFileName(string tableName); //return the file name of table information
-    string getIndexFileName(string indexName); //return the file name of index information
-	int recordLength(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, int blockOffset); //calculate the max record length of a table
-	int recordRowLength(char* recordBegin, int recordSize, vector<Attribute>* attributeVector, vector<string> *attributeNameVector); //calculate the max record length of a row in the table
+    int createTable(string tableName); // 创建表来初始化记录
+    int dropTable(string tableName); //删除一个表和所有记录
+    int dropIndex(string indexName); //在属性上删除索引
+    int createIndex(string indexName); //在属性上创建索引
+	int insertRecord(string tableName, char* record, int recordSize); //向表中插入记录
+    int recordAllShow(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector); //显示所有选择的记录
+    int recordBlockShow(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, int blockOffset); //显示已设计的记录以供选择
+    int recordAllFind(string tableName, vector<Condition>* conditionVector); //查找表的记录
+    int recordAllDelete(string tableName, vector<Condition>* conditionVector); //删除一个表的所有记录
+    int recordBlockDelete(string tableName,  vector<Condition>* conditionVector, int blockOffset); //删除内存中的记录块
+    int indexRecordAllAlreadyInsert(string tableName,string indexName); //为表中已经存在的记录创建索引
+    string getTableFileName(string tableName); //返回表信息的文件名
+    string getIndexFileName(string indexName); //返回表信息的索引名
+	int recordLength(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, int blockOffset); //计算表的最大记录长度
+	int recordRowLength(char* recordBegin, int recordSize, vector<Attribute>* attributeVector, vector<string> *attributeNameVector); //计算表中一行的最大记录长度
 	void setAPI(API* apiInput);
 
 private:
 	BufferManager bm;
 	API *api;
 
-    int recordBlockShow(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, blockNode* block); //show records in a block
-    int recordBlockFind(string tableName, vector<Condition>* conditionVector, blockNode* block); //find the record block position
-    int recordBlockDelete(string tableName,  vector<Condition>* conditionVector, blockNode* block); //delete a record block from memory
-    int indexRecordBlockAlreadyInsert(string tableName,string indexName, blockNode* block); //make index for block already based
-    bool recordConditionFit(char* recordBegin,int recordSize, vector<Attribute>* attributeVector,vector<Condition>* conditionVector); //fit the condition of blocks
-    void recordPrint(char* recordBegin, int recordSize, vector<Attribute>* attributeVector, vector<string> *attributeNameVector); //print record information
-    bool contentConditionFit(char* content, int type, Condition* condition); //fit the condition of a content 
-    void contentPrint(char * content, int type); //print the content in its type
+    int recordBlockShow(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, blockNode* block); //显示块中的记录
+    int recordBlockFind(string tableName, vector<Condition>* conditionVector, blockNode* block); //找到记录块的位置
+    int recordBlockDelete(string tableName,  vector<Condition>* conditionVector, blockNode* block); //从内存中删除一个记录块
+    int indexRecordBlockAlreadyInsert(string tableName,string indexName, blockNode* block); //为块创建索引
+    bool recordConditionFit(char* recordBegin,int recordSize, vector<Attribute>* attributeVector,vector<Condition>* conditionVector); //符合块的条件
+    void recordPrint(char* recordBegin, int recordSize, vector<Attribute>* attributeVector, vector<string> *attributeNameVector); //打印记录信息
+    bool contentConditionFit(char* content, int type, Condition* condition); // 符合内容的条件
+    void contentPrint(char * content, int type); //以其类型打印内容
 };
 
 #endif
