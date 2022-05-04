@@ -12,12 +12,12 @@ using namespace std;
 
 static BufferManager bm;
 
-typedef int offsetNum; // the value of the tree node
+typedef int offsetNum; // 树节点的值
 
 class API;
 template<typename KeyType> class BPlusTree;
 
-//class for attributes information and judging
+//类的属性信息和判断
 class Attribute {
 public:
 	Attribute();
@@ -34,8 +34,8 @@ public:
 
 private:
 	string name;
-	string index;  // default value is "", representing no index
-	int type; //the type of the attribute,-1 represents float, 0 represents int, other positive integer represents char and the value is the number of char)
+	string index;  // 默认值为“”，表示无索引
+	int type; //属性的类型，-1表示float, 0表示int，其他正整数表示char，值为char的个数)
 	bool ifUnique;
 };
 
