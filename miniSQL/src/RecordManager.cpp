@@ -16,27 +16,27 @@ int RecordManager::createTable(string tableName){
     string tableFileName = getTableFileName(tableName); //获取要打开的表文件名
     
     FILE *fp;
-    fp = fopen(tableFileName.c_str(), "a+");
+    fp = fopen(tableFileName.c_str(), "a+");//打开表文件
     if (fp == NULL)
         return 0;
-    fclose(fp);
+    fclose(fp);//关闭文件
     return 1;
 }
 
 int RecordManager::dropTable(string tableName){
-    string tableFileName = getTableFileName(tableName);
-    bm.deleteFileNode(tableFileName.c_str());
+    string tableFileName = getTableFileName(tableName);//获取要删除的表文件名
+    bm.deleteFileNode(tableFileName.c_str());//调用deleteFileNode
 
-    if (remove(tableFileName.c_str())) 
+    if (remove(tableFileName.c_str())) //若删除成功
 		return 0;
     return 1;
 }
 
 int RecordManager::createIndex(string indexName){
-    string indexFileName = getIndexFileName(indexName);
-    
+    string indexFileName = getIndexFileName(indexName);//获取要创建的索引名
+  
     FILE *fp;
-    fp = fopen(indexFileName.c_str(), "a+");
+    fp = fopen(indexFileName.c_str(), "a+");//打开索引文件
     if (fp == NULL)
         return 0;
     fclose(fp);
@@ -44,9 +44,9 @@ int RecordManager::createIndex(string indexName){
 }
 
 int RecordManager::dropIndex(string indexName){
-    string indexFileName = getIndexFileName(indexName);
-    bm.deleteFileNode(indexFileName.c_str());
-    if (remove(indexFileName.c_str()))
+    string indexFileName = getIndexFileName(indexName);//获取要删除的索引名
+    bm.deleteFileNode(indexFileName.c_str());//调用deleteFileNode
+    if (remove(indexFileName.c_str()))//若删除成功
         return 0;
     return 1;
 }
@@ -55,13 +55,13 @@ int RecordManager::insertRecord(string tableName,char* record, int recordSize){
     fileNode *ftmp = bm.getFile(getTableFileName(tableName).c_str());
     blockNode *btmp = bm.getBlockHead(ftmp);
     while (true){
-        if (btmp == NULL)
+        if (btmp == NULL)//如果块为空，则返回-1
             return -1;
 
-        if (bm.getUsingSize(*btmp) <= bm.getBlockSize() - recordSize){
+        if (bm.getUsingSize(*btmp) <= bm.getBlockSize() - recordSize){//块使用的字节大小小于等于可使用的字节大小
             char* addressBegin;
-            addressBegin = bm.getContent(*btmp) + bm.getUsingSize(*btmp);
-            memcpy(addressBegin, record, recordSize);
+            addressBegin = bm.getContent(*btmp) + bm.getUsingSize(*btmp);//确定起始位置
+            memcpy(addressBegin, record, recordSize);//将记录复制到addressBegin
             bm.setUsingSize(*btmp, bm.getUsingSize(*btmp) + recordSize);
             bm.setDirty(*btmp);
             return btmp->offsetNum;
@@ -78,18 +78,18 @@ int RecordManager::recordAllShow(string tableName, vector<string>* attributeName
     blockNode *btmp = bm.getBlockHead(ftmp);
     int count = 0;
     while (true){
-        if (btmp == NULL)
+        if (btmp == NULL)//如果块为空，则返回-1
             return -1;
 
-        if (btmp->ifbottom){
+        if (btmp->ifbottom){//若文件节点结束
             int recordBlockNum = recordBlockShow(tableName,attributeNameVector, conditionVector, btmp);
             count += recordBlockNum;
-            return count;
+            return count;//返回记录总数
         }
         else{
             int recordBlockNum = recordBlockShow(tableName, attributeNameVector, conditionVector, btmp);
             count += recordBlockNum;
-            btmp = bm.getNextBlock(ftmp, btmp);
+            btmp = bm.getNextBlock(ftmp, btmp);//将块指针指向下一个块
         }
     }
     
@@ -100,9 +100,9 @@ int RecordManager::recordBlockShow(string tableName, vector<string>* attributeNa
     fileNode *ftmp = bm.getFile(getTableFileName(tableName).c_str());
     blockNode* block = bm.getBlockByOffset(ftmp, blockOffset);
 
-    if (block == NULL)
+    if (block == NULL)//如果块为空，则返回-1
         return -1;
-    else
+    else//块非空
         return  recordBlockShow(tableName, attributeNameVector, conditionVector, block);
 }
 
@@ -113,26 +113,26 @@ int RecordManager::recordBlockShow(string tableName, vector<string>* attributeNa
     
     int count = 0;
     
-    char* recordBegin = bm.getContent(*block);
+    char* recordBegin = bm.getContent(*block);//获取记录起始点
     vector<Attribute> attributeVector;
     int recordSize = api->getRecordSize(tableName);
 
     api->getAttribute(tableName, &attributeVector);
-    char* blockBegin = bm.getContent(*block);
-    size_t usingSize = bm.getUsingSize(*block);
+    char* blockBegin = bm.getContent(*block);//获取块的起始点
+    size_t usingSize = bm.getUsingSize(*block);//块的使用大小
     
 	if (usingSize == 0)
 		return count;
 	cout << "* ";
-    while (recordBegin - blockBegin  < usingSize){
+    while (recordBegin - blockBegin  < usingSize){//若记录起始点减块起始点小于块所需大小
         //如果recordBegin指向一个记录
         if(recordConditionFit(recordBegin, recordSize, &attributeVector, conditionVector)){
-            count ++;
-            recordPrint(recordBegin, recordSize, &attributeVector, attributeNameVector);
+            count ++;//记录数加1
+            recordPrint(recordBegin, recordSize, &attributeVector, attributeNameVector);//打印数据
             cout <<"\n* ";
         }
         
-        recordBegin += recordSize;
+        recordBegin += recordSize;//指向下一个记录
     }
 	for (int i = 0; i < (*attributeNameVector).size(); i++) {
 		for (int j = 0; j < api->getLength() + 4; j += 2)
@@ -149,17 +149,17 @@ int RecordManager::recordAllFind(string tableName, vector<Condition>* conditionV
     int count = 0;
 
     while (true){
-        if (btmp == NULL)
+        if (btmp == NULL)//如果块为空，则返回-1
             return -1;
-        if (btmp->ifbottom){
+        if (btmp->ifbottom){//若文件节点结束
             int recordBlockNum = recordBlockFind(tableName, conditionVector, btmp);
             count += recordBlockNum;
-            return count;
+            return count;//返回冲突记录总数
         }
         else{
             int recordBlockNum = recordBlockFind(tableName, conditionVector, btmp);
             count += recordBlockNum;
-            btmp = bm.getNextBlock(ftmp, btmp);
+            btmp = bm.getNextBlock(ftmp, btmp);//将块指针指向下一个块
         }
     }
     
@@ -172,18 +172,18 @@ int RecordManager::recordBlockFind(string tableName, vector<Condition>* conditio
         return -1;
     int count = 0;
     
-    char* recordBegin = bm.getContent(*block);
+    char* recordBegin = bm.getContent(*block);//获取记录起始点
     vector<Attribute> attributeVector;
-    int recordSize = api->getRecordSize(tableName);
+    int recordSize = api->getRecordSize(tableName);//获取记录大小
     
     api->getAttribute(tableName, &attributeVector);
     
     while (recordBegin - bm.getContent(*block)  < bm.getUsingSize(*block)){
         //如果recordBegin指向一个记录
         if(recordConditionFit(recordBegin, recordSize, &attributeVector, conditionVector))
-            count++;
+            count++;//记录总数加1
         
-        recordBegin += recordSize;
+        recordBegin += recordSize;//指向下一个记录
     }
     
     return count;
@@ -195,17 +195,17 @@ int RecordManager::recordAllDelete(string tableName, vector<Condition>* conditio
 
     int count = 0;
     while (true){
-        if (btmp == NULL)
+        if (btmp == NULL)//如果块为空，则返回-1
             return -1;
-        if (btmp->ifbottom){
+        if (btmp->ifbottom){//若文件节点结束
             int recordBlockNum = recordBlockDelete(tableName, conditionVector, btmp);
             count += recordBlockNum;
-            return count;
+            return count;//返回删除的记录总数
         }
         else{
             int recordBlockNum = recordBlockDelete(tableName, conditionVector, btmp);
             count += recordBlockNum;
-            btmp = bm.getNextBlock(ftmp, btmp);
+            btmp = bm.getNextBlock(ftmp, btmp);//将块指针指向下一个块
         }
     }
     
@@ -216,7 +216,7 @@ int RecordManager::recordBlockDelete(string tableName,  vector<Condition>* condi
     fileNode *ftmp = bm.getFile(getTableFileName(tableName).c_str());
     blockNode* block = bm.getBlockByOffset(ftmp, blockOffset);
 
-    if (block == NULL)
+    if (block == NULL)//如果块为空，则返回-1
         return -1;
     else
         return  recordBlockDelete(tableName, conditionVector, block);
@@ -228,28 +228,28 @@ int RecordManager::recordBlockDelete(string tableName,  vector<Condition>* condi
         return -1;
     int count = 0;
     
-    char* recordBegin = bm.getContent(*block);
+    char* recordBegin = bm.getContent(*block);//获取记录起始点
     vector<Attribute> attributeVector;
-    int recordSize = api->getRecordSize(tableName);
+    int recordSize = api->getRecordSize(tableName);//获取记录大小
     
     api->getAttribute(tableName, &attributeVector);
     
     while (recordBegin - bm.getContent(*block) < bm.getUsingSize(*block)){
         //如果recordBegin指向一个记录
         if(recordConditionFit(recordBegin, recordSize, &attributeVector, conditionVector)){
-            count ++;
+            count ++;//删除记录数加1
             
-            api->deleteRecordIndex(recordBegin, recordSize, &attributeVector, block->offsetNum);
+            api->deleteRecordIndex(recordBegin, recordSize, &attributeVector, block->offsetNum);//同时删除记录的索引
             int i = 0;
             for (i = 0; i + recordSize + recordBegin - bm.getContent(*block) < bm.getUsingSize(*block); i++){
                 recordBegin[i] = recordBegin[i + recordSize];
             }
-            memset(recordBegin + i, 0, recordSize);
+            memset(recordBegin + i, 0, recordSize);//清空记录
             bm.setUsingSize(*block, bm.getUsingSize(*block) - recordSize);
-            bm.setDirty(*block);
+            bm.setDirty(*block); //表示此块是脏的，稍后需要将其写回磁盘
         }
         else
-            recordBegin += recordSize;
+            recordBegin += recordSize;//指向下一个记录
     }
     
     return count;
@@ -262,7 +262,7 @@ int RecordManager::indexRecordAllAlreadyInsert(string tableName,string indexName
     while (true){
         if (btmp == NULL)
             return -1;
-        if (btmp->ifbottom){
+        if (btmp->ifbottom){//若文件节点结束
             int recordBlockNum = indexRecordBlockAlreadyInsert(tableName, indexName, btmp);
             count += recordBlockNum;
             return count;
@@ -283,9 +283,9 @@ int RecordManager::indexRecordBlockAlreadyInsert(string tableName,string indexNa
         return -1;
     int count = 0;
     
-    char* recordBegin = bm.getContent(*block);
+    char* recordBegin = bm.getContent(*block);//获取记录起始点
     vector<Attribute> attributeVector;
-    int recordSize = api->getRecordSize(tableName);
+    int recordSize = api->getRecordSize(tableName);//获取记录大小
     
     api->getAttribute(tableName, &attributeVector);
     
@@ -308,7 +308,7 @@ int RecordManager::indexRecordBlockAlreadyInsert(string tableName,string indexNa
             
             contentBegin += typeSize;
         }
-        recordBegin += recordSize;
+        recordBegin += recordSize;//指向下一个记录
     }
     
     return count;
@@ -450,9 +450,9 @@ int RecordManager::recordLength(string tableName, vector<string>* attributeNameV
 		return -1;
 	int length = 0;
 
-	char* recordBegin = bm.getContent(*block);
+	char* recordBegin = bm.getContent(*block);//获取记录起始点
 	vector<Attribute> attributeVector;
-	int recordSize = api->getRecordSize(tableName);
+	int recordSize = api->getRecordSize(tableName);//获取记录大小
 
 	api->getAttribute(tableName, &attributeVector);
 	char* blockBegin = bm.getContent(*block);
@@ -462,7 +462,7 @@ int RecordManager::recordLength(string tableName, vector<string>* attributeNameV
 		//如果recordBegin指向一个记录
 		if (recordConditionFit(recordBegin, recordSize, &attributeVector, conditionVector)) {
 			int lentmp = recordRowLength(recordBegin, recordSize, &attributeVector, attributeNameVector);
-			if (lentmp > length)
+			if (lentmp > length)//更新长度
 				length = lentmp;
 		}
 		recordBegin += recordSize;
