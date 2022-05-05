@@ -49,6 +49,7 @@ int main(){
     ////打印minisql的基本信息
     cout << "\nCopyright 2022, Made by ORACLE谢谢你. All rights reserved." << endl;
 	cout << "\nType 'help' for help." << endl;
+    cout << "\n注意每句命令均要以英文字符中的;结尾" << endl;
 
     //无限循环
     while(true){
