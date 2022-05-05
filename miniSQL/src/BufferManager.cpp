@@ -37,7 +37,8 @@ BufferManager::~BufferManager(){
     }
 }
 
-void BufferManager::initFile(fileNode &file){//初始化文件
+//初始化文件
+void BufferManager::initFile(fileNode &file){
     file.nextFile = NULL;
     file.preFile = NULL;
     file.blockHead = NULL;
@@ -45,9 +46,12 @@ void BufferManager::initFile(fileNode &file){//初始化文件
     memset(file.fileName,0,MAX_FILE_NAME);
 }
 
-void BufferManager::initBlock(blockNode &block){//初始化块
+//初始化块
+void BufferManager::initBlock(blockNode &block){
+    //初始化内存块总大小4096
     memset(block.address,0,BLOCK_SIZE);
     size_t init_usage = 0;
+    //size_t大小足以保证存储内存中对象的大小
     memcpy(block.address, (char*)&init_usage, sizeof(size_t)); //设置块头
     block.usingSize = sizeof(size_t);
     block.dirty = false;
@@ -60,11 +64,14 @@ void BufferManager::initBlock(blockNode &block){//初始化块
     memset(block.fileName,0,MAX_FILE_NAME);
 }
 
+//返回文件fileNode
 fileNode* BufferManager::getFile(const char * fileName, bool if_pin){
     blockNode * btmp = NULL;
     fileNode * ftmp = NULL;
     if(fileHead != NULL){
+        //文件检索
         for(ftmp = fileHead;ftmp != NULL;ftmp = ftmp->nextFile){
+            //比对文件名
             if(!strcmp(fileName, ftmp->fileName)){ 
 				//fileNode已经在列表中
                 ftmp->pin = if_pin;
@@ -117,6 +124,7 @@ fileNode* BufferManager::getFile(const char * fileName, bool if_pin){
     return ftmp;
 }
 
+//返回BlockNode
 blockNode* BufferManager::getBlock(fileNode * file,blockNode *position, bool if_pin){
     const char * fileName = file->fileName;
     blockNode * btmp = NULL;
@@ -211,6 +219,7 @@ blockNode* BufferManager::getBlock(fileNode * file,blockNode *position, bool if_
     return btmp;
 }
 
+//写回文件至硬盘,(指定文件名)
 void BufferManager::writtenBackToDisk(const char* fileName,blockNode* block){
     if(!block->dirty) // 这个块没有被修改过，所以它不需要写回文件
         return;
@@ -237,6 +246,7 @@ void BufferManager::writtenBackToDisk(const char* fileName,blockNode* block){
     }
 }
 
+//写回全部文件至硬盘
 void BufferManager::writtenBackToDiskAll(){
     blockNode *btmp = NULL;
     fileNode *ftmp = NULL;
@@ -252,6 +262,7 @@ void BufferManager::writtenBackToDiskAll(){
     }
 }
 
+//获取下一个块BLOCK
 blockNode* BufferManager::getNextBlock(fileNode* file,blockNode* block){
     if(block->nextBlock == NULL){//若后驱节点为空块
         if(block->ifbottom) block->ifbottom = false;// 文件节点结束的标志设为false
@@ -266,6 +277,7 @@ blockNode* BufferManager::getNextBlock(fileNode* file,blockNode* block){
     }
 }
 
+//获取块头BLockHead
 blockNode* BufferManager::getBlockHead(fileNode* file){
     blockNode* btmp = NULL;
     if(file->blockHead != NULL){//若文件有块头
@@ -281,6 +293,7 @@ blockNode* BufferManager::getBlockHead(fileNode* file){
     return btmp;
 }
 
+//获取块(指定offset)
 blockNode* BufferManager::getBlockByOffset(fileNode* file, int offsetNumber){
     blockNode* btmp = NULL;
     if(offsetNumber == 0) return getBlockHead(file);//若偏移量为0
@@ -294,6 +307,7 @@ blockNode* BufferManager::getBlockByOffset(fileNode* file, int offsetNumber){
     }
 }
 
+//删除文件节点
 void BufferManager::deleteFileNode(const char * fileName){
     fileNode* ftmp = getFile(fileName);
     blockNode* btmp = getBlockHead(ftmp);
@@ -316,42 +330,50 @@ void BufferManager::deleteFileNode(const char * fileName){
     totalFile --;
 }
 
+//设置块PIN锁,若没有锁则reference,LRU更换标志为true
 void BufferManager::setPin(blockNode &block,bool pin){
     block.pin = pin;
     if(!pin)
         block.reference = true;
 }
 
+//设置文件PIN锁
 void BufferManager::setPin(fileNode &file,bool pin){
     file.pin = pin;
 }
 
+//设置此块为脏
 void BufferManager::setDirty(blockNode &block){
     block.dirty = true;
 }
 
+//设置此块为非脏
 void BufferManager::cleanDirty(blockNode &block){
     block.dirty = false;
 }
 
+//返回块使用地址空间大小
 size_t BufferManager::getUsingSize(blockNode* block){
     return *(size_t*)block->address;
 }
 
+//设置块使用空间
 void BufferManager::setUsingSize(blockNode & block,size_t usage){
     block.usingSize = usage;
     memcpy(block.address,(char*)&usage,sizeof(size_t));
 }
 
+//返回块使用的字节大小
 size_t BufferManager::getUsingSize(blockNode & block){
     return block.usingSize;
 }
 
+//返回地址内容
 char* BufferManager::getContent(blockNode& block){
     return block.address + sizeof(size_t);
 }
 
+//获取其他可以使用的块的大小。其他不能使用块头
 int BufferManager::getBlockSize() {
-	//获取其他人可以使用的块的大小。其他人不能使用块头
 	return BLOCK_SIZE - sizeof(size_t);
 }

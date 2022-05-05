@@ -12,19 +12,20 @@ CatalogManager *cm;
 IndexManager* im;
 
 Condition::Condition() {
-    //default ctor
+    //默认创建Condition
 }
 
 Condition::~Condition() {
-    //default dtor
+    //默认删除Condition
 }
 
 Condition::Condition(string attributeInput, string valueInput, int operateInput) :
 attributeName(attributeInput),value(valueInput),operate(operateInput){
-	//ctor with input
+	//带有输入的创建
 }
-
+//INT类判断
 bool Condition::FitAttribute(int content) {
+    //初始化myContent = ss
 	stringstream ss;
 	ss << value;
 	int myContent;
@@ -48,7 +49,7 @@ bool Condition::FitAttribute(int content) {
 		return true;
 	}
 }
-
+//FLOAT类判断
 bool Condition::FitAttribute(float content) {
 	stringstream ss;
 	ss << value;
@@ -72,7 +73,7 @@ bool Condition::FitAttribute(float content) {
 		return true;
 	}
 }
-
+//STRING类判断
 bool Condition::FitAttribute(string content) {
 	string myContent = value;
 	switch (operate) {
@@ -107,16 +108,19 @@ int Condition::getOperate() {
 
 
 API::API():length(0){
-    //default ctor
+    //默认创建API
 }
 
 API::~API(){
-    //default dtor
+    //默认删除API
 }
 
+//删除表
 void API::dropTable(string tableName){
+    //容错:表名不存在
     if (!tableExist(tableName)) 
         return;
+    //索引名STRING向量
     vector<string> indexNameVector;
 
     //获取表中的所有索引，然后删除它们
@@ -464,6 +468,7 @@ int API::getTypeSize(int type){
     return cm->calcuteLenth(type);
 }
 
+//获取表中所有索引名
 int API::getIndexNameList(string tableName, vector<string>* indexNameVector){
     if (!tableExist(tableName))
         return 0;

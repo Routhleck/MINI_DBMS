@@ -1,1 +1,56 @@
-﻿  Minisql.vcxproj -> D:\cpp_sourcecode\project\0504\MINISQL-master\MINISQL-master\MINISQL\miniSQL\x64\Debug\Minisql.exe
+﻿  API.cpp
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\API.cpp(579,45): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  BufferManager.cpp
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\BufferManager.cpp(115,5): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\BufferManager.cpp(191,5): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\BufferManager.cpp(195,22): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\BufferManager.cpp(220,26): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\BufferManager.cpp(307,32): warning C4267: “-=”: 从“size_t”转换到“int”，可能丢失数据
+  CatalogManager.cpp
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\CatalogManager.cpp(86,7): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\CatalogManager.cpp(260,44): warning C4267: “=”: 从“size_t”转换到“char”，可能丢失数据
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\CatalogManager.cpp(246,7): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  IndexManager.cpp
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(777,43): warning C4018: “<”: 有符号/无符号不匹配
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(770): message : 在编译 类 模板 成员函数“void BPlusTree<int>::ReadDiskNode(blockNode *)”时
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(802): message : 查看对正在编译的函数 模板 实例化“void BPlusTree<int>::ReadDiskNode(blockNode *)”的引用
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(747): message : 在编译 类 模板 成员函数“void BPlusTree<int>::DropTree(BPlusTreeNode<KeyType> *)”时
+          with
+          [
+              KeyType=int
+          ]
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(416): message : 查看对正在编译的函数 模板 实例化“void BPlusTree<int>::DropTree(BPlusTreeNode<KeyType> *)”的引用
+          with
+          [
+              KeyType=int
+          ]
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(398): message : 在编译 类 模板 成员函数“BPlusTree<int>::BPlusTree(int,int,std::string)”时
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.cpp(143): message : 查看对正在编译的函数 模板 实例化“BPlusTree<int>::BPlusTree(int,int,std::string)”的引用
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.cpp(110): message : 查看对正在编译的 类 模板 实例化“BPlusTree<int>”的引用
+  Interpreter.cpp
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  main.cpp
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\main.cpp(47,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\main.cpp(95,13): warning C4129: “ ”: 不可识别的字符转义序列
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\main.cpp(20,7): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\main.cpp(23,8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  RecordManager.cpp
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\IndexManager.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(19,10): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(39,10): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(127,38): warning C4018: “<”: 有符号/无符号不匹配
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(181,49): warning C4018: “<”: 有符号/无符号不匹配
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(237,48): warning C4018: “<”: 有符号/无符号不匹配
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(244,78): warning C4018: “<”: 有符号/无符号不匹配
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(296,49): warning C4018: “<”: 有符号/无符号不匹配
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(461,35): warning C4018: “<”: 有符号/无符号不匹配
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(500,26): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(510,27): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+F:\c++_sourceCode\project\QT_DBMS\miniSQL\src\RecordManager.cpp(516,26): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  正在生成代码...
+  LINK : 没有找到 F:\c++_sourceCode\project\QT_DBMS\miniSQL\x64\Debug\Minisql.exe 或上一个增量链接没有生成它；正在执行完全链接
+  Minisql.vcxproj -> F:\c++_sourceCode\project\QT_DBMS\miniSQL\x64\Debug\Minisql.exe

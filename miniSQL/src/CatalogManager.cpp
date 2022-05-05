@@ -15,8 +15,10 @@ CatalogManager::~CatalogManager() {
 	// TODO Auto-generated destructor stub
 }
 
+//删除表
 int CatalogManager::dropTable(string tableName) {
 	string tableFileName = "表目录" + tableName;
+	//使用bufferManager删除指定表文件
 	bm.deleteFileNode(tableFileName.c_str());
 	if (remove(tableFileName.c_str()))
 		return 0;
