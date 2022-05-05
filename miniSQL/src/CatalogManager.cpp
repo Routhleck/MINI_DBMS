@@ -82,7 +82,7 @@ int CatalogManager::addIndex(string indexName, string tableName, string Attribut
 	return 0;
 }
 
-int CatalogManager::findTable(string tableName) {
+int CatalogManager::findTable(string tableName) {//查找表
 	FILE *fp;
 	string tableFileName = "表目录" + tableName;
 	fp = fopen(tableFileName.c_str(), "r");
@@ -193,13 +193,13 @@ int CatalogManager::getIndexNameList(string tableName, vector<string>* indexName
 	return 0;
 }
 
-int CatalogManager::deleteValue(string tableName, int deleteNum) {
+int CatalogManager::deleteValue(string tableName, int deleteNum) {//删除数据
 	string tableFileName = "表目录" + tableName;
-	fileNode *ftmp = bm.getFile(tableFileName.c_str());
-	blockNode *btmp = bm.getBlockHead(ftmp);
+	fileNode *ftmp = bm.getFile(tableFileName.c_str());//从缓冲区中寻找目标文件
+	blockNode *btmp = bm.getBlockHead(ftmp);//获取目标文件的头块
 
 	if (btmp) {
-		char* addressBegin = bm.getContent(*btmp);
+		char* addressBegin = bm.getContent(*btmp);//获取数据的地址
 		int * recordNum = (int*)addressBegin;
 		if ((*recordNum) <deleteNum) {
 			cout << "CatalogManager出现错误::删除数据" << endl;
@@ -214,7 +214,7 @@ int CatalogManager::deleteValue(string tableName, int deleteNum) {
 	return 0;
 }
 
-int CatalogManager::insertRecord(string tableName, int recordNum) {
+int CatalogManager::insertRecord(string tableName, int recordNum) {//插入数据
 	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
@@ -229,7 +229,7 @@ int CatalogManager::insertRecord(string tableName, int recordNum) {
 	return 0;
 }
 
-int CatalogManager::getRecordNum(string tableName) {
+int CatalogManager::getRecordNum(string tableName) {//获取数据的数量
 	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());
 	blockNode *btmp = bm.getBlockHead(ftmp);
@@ -245,7 +245,7 @@ int CatalogManager::getRecordNum(string tableName) {
 int CatalogManager::addTable(string tableName, vector<Attribute>* attributeVector, string primaryKeyName = "", int primaryKeyLocation = 0) {
 	FILE *fp;
 	string tableFileName = "表目录" + tableName;
-	fp = fopen(tableFileName.c_str(), "w+");
+	fp = fopen(tableFileName.c_str(), "w+");//写入文件
 	if (fp == NULL)
 		return 0;
 	fclose(fp);
@@ -255,11 +255,11 @@ int CatalogManager::addTable(string tableName, vector<Attribute>* attributeVecto
 	if (btmp) {
 		char* addressBegin = bm.getContent(*btmp);
 		int * size = (int*)addressBegin;
-		*size = 0;// 0 record number
+		*size = 0;// 0记录编号
 		addressBegin += sizeof(int);
-		*addressBegin = primaryKeyLocation;//1 as what it says
+		*addressBegin = primaryKeyLocation;//1 内容
 		addressBegin++;
-		*addressBegin = (*attributeVector).size();// 2 attribute number
+		*addressBegin = (*attributeVector).size();// 2属性编号
 		addressBegin++;
 		//memcpy(addressBegin, attributeVector, (*attributeVector).size()*sizeof(Attribute));
 		for (int i = 0; i<(*attributeVector).size(); i++) {
@@ -334,7 +334,7 @@ int CatalogManager::calcuteLenth(string tableName) {
 		int size = *addressBegin;
 		addressBegin++;
 		Attribute *a = (Attribute *)addressBegin;
-		for (int i = 0; i<size; i++) {
+		for (int i = 0; i<size; i++) {//根据数据类型分别计算长度
 			if ((*a).getType() == -1) {
 				singleRecordSize += sizeof(float);
 			}
@@ -362,10 +362,10 @@ int CatalogManager::calcuteLenth(int type) {
 	else if (type == Attribute::TYPE_FLOAT)
 		return sizeof(float);
 	else
-		return (int)type * sizeof(char); // Note that the type stores in Attribute.h
+		return (int)type * sizeof(char); // 该类型存储在 Attribute.h
 }
 
-// Get the record string of a table by the table name and recordContent, write the result to the recordResult reference.
+// 通过表名和recordContent获取表的记录字符串，并将结果写入recordResult引用。
 void CatalogManager::getRecordString(string tableName, vector<string>* recordContent, char* recordResult) {
 	vector<Attribute> attributeVector;
 	string tableFileName = "表目录" + tableName;
@@ -380,19 +380,19 @@ void CatalogManager::getRecordString(string tableName, vector<string>* recordCon
 		stringstream ss;
 		ss << content;
 		if (type == Attribute::TYPE_INT) {
-			//if the content is a int
+			//内容是 int
 			int intTmp;
 			ss >> intTmp;
 			memcpy(contentBegin, ((char*)&intTmp), typeSize);
 		}
 		else if (type == Attribute::TYPE_FLOAT) {
-			//if the content is a float
+			//内容是 float
 			float floatTmp;
 			ss >> floatTmp;
 			memcpy(contentBegin, ((char*)&floatTmp), typeSize);
 		}
 		else {
-			//if the content is a string
+			//内容是 string
 			memcpy(contentBegin, content.c_str(), typeSize);
 		}
 
