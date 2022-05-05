@@ -58,7 +58,7 @@ int main(){
             //执行sql文件
             file.open(interpreter.getFilename());
             if(!file.is_open()){
-                cout<<"Fail to open "<<interpreter.getFilename()<<endl;
+                cout<<"文件打开失败： "<<interpreter.getFilename()<<endl;
                 fileExec = 0;
                 continue;
             }
