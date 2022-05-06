@@ -28,7 +28,7 @@ struct blockNode{
 	size_t usingSize; // 块使用的字节大小。块的总大小为BLOCK_SIZE。这个值存储在块头部。
 };
 
-
+//文件节点B+树
 struct fileNode{
 	char *fileName;
 	bool pin; // 此文件被锁定的标志
