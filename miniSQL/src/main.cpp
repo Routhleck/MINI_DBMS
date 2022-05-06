@@ -47,7 +47,7 @@ int main(){
 	srand(time(NULL));
 
     ////打印minisql的基本信息
-    cout << "\nCopyright 2022, Made by ORACLE就是寄吧. All rights reserved." << endl;
+    cout << "\nCopyright 2022, Made by Group 10. All rights reserved." << endl;
 	cout << "\nType 'help' for help." << endl;
 
     //无限循环

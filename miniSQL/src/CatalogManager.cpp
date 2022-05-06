@@ -196,7 +196,7 @@ int CatalogManager::getIndexNameList(string tableName, vector<string>* indexName
 int CatalogManager::deleteValue(string tableName, int deleteNum) {//删除数据
 	string tableFileName = "表目录" + tableName;
 	fileNode *ftmp = bm.getFile(tableFileName.c_str());//从缓冲区中寻找目标文件
-	blockNode *btmp = bm.getBlockHead(ftmp);//获取目标文件的头块
+	blockNode *btmp = bm.getBlockHead(ftmp);//获取目标文件的块头
 
 	if (btmp) {
 		char* addressBegin = bm.getContent(*btmp);//获取数据的地址
