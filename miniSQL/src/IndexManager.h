@@ -40,7 +40,7 @@ private:
 };
 
 
-//class for index information
+//索引类
 class IndexInfo {
 public:
 	IndexInfo();
