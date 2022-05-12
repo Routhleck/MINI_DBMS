@@ -32,7 +32,7 @@ public:
     int indexRecordAllAlreadyInsert(string tableName,string indexName); //为表中已经存在的记录创建索引
     string getTableFileName(string tableName); //返回表信息的文件名
     string getIndexFileName(string indexName); //返回表信息的索引名
-	int recordLength(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, int blockOffset); //计算表的最大记录长度
+	int recordLength(string tableName, vector<string>* attributeNameVector, vector<Condition>* conditionVector, int blockOffset); //计算表的最大录长度记
 	int recordRowLength(char* recordBegin, int recordSize, vector<Attribute>* attributeVector, vector<string> *attributeNameVector); //计算表中一行的最大记录长度
 	void setAPI(API* apiInput);
 
