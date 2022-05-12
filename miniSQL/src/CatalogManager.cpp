@@ -5,6 +5,9 @@ using namespace std;
 #define UNKNOWN_FILE -10
 #define TABLE_FILE -20
 #define INDEX_FILE -30
+#define DATABASE_FILE -40
+
+string useDatabase = "";
 
 CatalogManager::CatalogManager() {
 	// TODO Auto-generated constructor stub
@@ -114,6 +117,17 @@ int CatalogManager::findTable(string tableName) {
 		fclose(fp);
 		return TABLE_FILE;
 	}
+}
+
+//查找数据库文件夹是否存在
+int CatalogManager::findDatabase(string databaseName)
+{
+	//查看文件夹是否存在
+	if (access(databaseName.c_str(), 0) == -1)
+		return 0;
+	else
+		return DATABASE_FILE;
+	return 0;
 }
 
 //查找索引,若找到->返回INDEX_FILE,没找到->返回UNKNOWN_FILE,此块不存在->返回0
@@ -336,6 +350,11 @@ int CatalogManager::addTable(string tableName, vector<Attribute>* attributeVecto
 		return 1;
 	}
 	return 0;
+}
+//添加数据库,成功->返回1,失败->返回0
+int CatalogManager::addDatabase(string databaseName) {
+	useDatabase = databaseName;
+	return 1;
 }
 
 //添加索引具体实现,为addIndex服务,成功->返回1,失败->返回0

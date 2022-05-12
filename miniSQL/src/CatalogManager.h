@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <io.h>
 
 #include "BufferManager.h"
 #include "IndexManager.h"
@@ -22,6 +23,8 @@ public:
 	int revokeIndexOnAttribute(string tableName, string AttributeName, string indexName); 
 	//查找表,若找到->返回TABLE_FILE,失败->返回0
 	int findTable(string tableName); 
+	//查找数据库,若找到->返回DATABASE_FILE,失败->返回0
+	int findDatabase(string databaseName);
 	//查找索引,若找到->返回INDEX_FILE,没找到->返回UNKNOWN_FILE,此块不存在->返回0
 	int findIndex(string indexName); 
 	//删除表,成功->返回1,失败->返回0
@@ -42,6 +45,8 @@ public:
 	int setIndexOnAttribute(string tableName, string AttributeName, string indexName); 
 	//添加表,成功->返回1,失败->返回0
 	int addTable(string tableName, vector<Attribute>* attributeVector, string primaryKeyName, int primaryKeyLocation);
+	//添加数据库,成功->返回1,失败->返回0
+	int addDatabase(string databaseName);
 	//返回索引位置,若没有找到则返回-2
 	int getIndexType(string indexName);
 	//获取属性,将属性添加至attributeVector,成功->返回1,失败->返回0

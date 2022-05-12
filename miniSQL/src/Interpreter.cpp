@@ -235,6 +235,22 @@ int Interpreter::interpret(string s){
 				return 0;
 			}
 		}
+		//创建数据库
+		else if(command == "database"){
+			string databaseName = "";
+			command = getCommand(s,tmp);
+
+			if (!command.empty())
+				//创建表名
+				databaseName = command;
+			else {
+				//异常处理:没有输入数据库名
+				cout << "Syntax Error! No database name" << endl;
+				return 0;
+			}
+			//调用API创建数据库
+			api->createDatabase(databaseName);
+		}
 		else{
 			//异常处理:语法错误
 			cout << "Syntax Error!" << endl;
@@ -358,6 +374,7 @@ int Interpreter::interpret(string s){
 	else if(command == "drop"){
 		command = getCommand(s, tmp);
 
+		//删除表
 		if(command == "table"){
 			command = getCommand(s, tmp);
 			if(!command.empty()){
@@ -369,6 +386,7 @@ int Interpreter::interpret(string s){
 				return 1;
 			}
 		}
+		//删除索引
 		else if(command == "index"){
 			command = getCommand(s, tmp);
 			if(!command.empty()){
@@ -376,6 +394,18 @@ int Interpreter::interpret(string s){
 				return 1;
 			}
 			else{
+				cout << "Syntax Error!" << endl;
+				return 1;
+			}
+		}
+		//删除数据库
+		else if (command == "database") {
+			command = getCommand(s, tmp);
+			if (!command.empty()) {
+				api->dropDatabase(command);
+				return 1;
+			}
+			else {
 				cout << "Syntax Error!" << endl;
 				return 1;
 			}
@@ -492,6 +522,21 @@ int Interpreter::interpret(string s){
 		}
 		api->insertRecord(tableName, &valueVector);
 		return 1;
+	}
+
+	//使用数据库
+	else if (command == "use") {
+		command = getCommand(s, tmp);
+		if (!command.empty()) {
+			//调用API使用数据库
+			api->useDatabase(command);
+			return 1;
+		}
+		else {
+			cout << "Syntax Error!" << endl;
+			return 1;
+		}
+
 	}
 
 	//退出

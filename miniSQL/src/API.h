@@ -66,6 +66,9 @@ public:
     void setRecordManager(RecordManager *rmInput);
     void setCatalogManager(CatalogManager *cmInput);
     void setIndexManager(IndexManager *imInput);
+	void createDatabase(string databaseName);//创建数据库
+	void useDatabase(string databaseName);//使用数据库
+	void dropDatabase(string databaseName);//删除数据库
 	int getLength();
 
 private:

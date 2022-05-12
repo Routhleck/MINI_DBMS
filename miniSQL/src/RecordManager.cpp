@@ -1,6 +1,7 @@
 #include "RecordManager.h"
 #include "API.h"
 #include <cstring>
+#include <direct.h>
 
 using namespace std;
 
@@ -25,6 +26,17 @@ int RecordManager::createTable(string tableName){
     fclose(fp);//关闭文件
     return 1;
 }
+
+//创建数据库
+int RecordManager::createDatabase(string databaseName){
+    //创建文件夹
+    if (_mkdir(databaseName.c_str()) == -1)
+        return 0;
+    //成功创建返回1
+    return 1;
+}
+
+
 
 //删除表
 int RecordManager::dropTable(string tableName){

@@ -7,6 +7,7 @@ using namespace std;
 #define UNKNOWN_FILE -10 //不存在文件
 #define TABLE_FILE -20 //包含表信息的文件
 #define INDEX_FILE -30 //包含索引信息的文件
+#define DATABASE_FILE -40 //数据库文件
 
 CatalogManager *cm;
 IndexManager* im;
@@ -652,6 +653,37 @@ void API::setCatalogManager(CatalogManager *cmInput){
 //设置indexManager
 void API::setIndexManager(IndexManager *imInput){
     im = imInput;
+}
+
+void API::createDatabase(string databaseName){
+    //调用catalogManager查找数据库是否存在
+    if (cm->findDatabase(databaseName) == DATABASE_FILE) {
+        clock_t finish = clock();
+        double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+        cout << "已经存在数据库" << databaseName << "已被创建.(" << duration << " s)" << endl;
+        return;
+    }
+
+    //调用recordManager创建数据库文件
+    if (rm->createDatabase(databaseName)) {
+        cm->addDatabase(databaseName);
+		clock_t finish = clock();
+		double duration = (double)(finish - start) / CLOCKS_PER_SEC;
+		cout << "查询完毕, 数据库 " << databaseName << " 已被创建.(" << duration << " s)" << endl;
+    }
+}
+
+void API::useDatabase(string databaseName){
+    //调用catalogManager查找数据库是否存在
+
+    //使用数据库，给全局变量赋值
+}
+
+void API::dropDatabase(string databaseName){
+    //调用catalogManager查找数据库是否存在
+
+    //调用recordManager删除数据库
+
 }
 
 //返回length

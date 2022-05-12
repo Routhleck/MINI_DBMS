@@ -20,6 +20,7 @@ public:
 	~RecordManager();
     
     int createTable(string tableName); // 创建表来初始化记录
+    int createDatabase(string databaseName); // 创建数据库来初始化记录
     int dropTable(string tableName); //删除一个表和所有记录
     int dropIndex(string indexName); //在属性上删除索引
     int createIndex(string indexName); //在属性上创建索引
