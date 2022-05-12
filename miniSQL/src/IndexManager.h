@@ -17,7 +17,7 @@ typedef int offsetNum; // 树节点的值
 class API;
 template<typename KeyType> class BPlusTree;
 
-//类的属性信息和判断
+//属性类
 class Attribute {
 public:
 	Attribute();
@@ -58,17 +58,17 @@ private:
 	int type;
 };
 
-
+//indexManager类
 class IndexManager{
 public:
 	IndexManager();
 	~IndexManager();
 	IndexManager(API *apiInput);
-	void createIndex(string filePath, int type); //create index for designed path and file
-	void dropIndex(string filePath, int type); //drop index for designed path and file
-	offsetNum searchIndex(string filePath, string key, int type); //search index for designed path and file
-	void insertIndex(string filePath, string key, offsetNum blockOffset, int type); //insert indexs
-	void deleteIndexByKey(string filePath, string key, int type); //delete index keys
+	void createIndex(string filePath, int type); //通过filePath和type创建索引
+	void dropIndex(string filePath, int type); //通过filePath和type删除索引
+	offsetNum searchIndex(string filePath, string key, int type); //通过filePath和type搜索索引
+	void insertIndex(string filePath, string key, offsetNum blockOffset, int type); //插入索引
+	void deleteIndexByKey(string filePath, string key, int type); //通过key删除索引
 	int getDegree(int type);
 	int getKeySize(int type);
 	void setKey(int type, string key);
@@ -81,12 +81,12 @@ private:
     int static const TYPE_FLOAT = Attribute::TYPE_FLOAT;
     int static const TYPE_INT = Attribute::TYPE_INT;
 
-    API 	   *api; // to call the functions of API
+    API 	   *api; 
     intMap 	   indexIntMap;
     stringMap  IndexstringMap;
     floatMap   indexFloatMap;
 
-	// the struct to help to convert the inputed string to specfied type
+	// 结构体 帮助将输入字符串转换为指定类型
     struct keyTmp {
         int intTmp;
         float floatTmp;
@@ -96,37 +96,39 @@ private:
 };
 
 template<typename KeyType>
+//b+树节点类
 class BPlusTreeNode {
     friend class BPlusTree<KeyType>;
 private:
-    int m_degree;     // degree of the node
+    int m_degree;     // 节点度数
 
 public:
-    int keysNum;                            // amount of keys
-    bool isLeaf;                            // whether is a leaf node
-    BPlusTreeNode *parent;                  // parent node of the node
-    BPlusTreeNode *nextLeafNode;            // next leaf node. e.g.if thos node is a leaf node
-    std::vector<KeyType> keySet;            // set of all keys in the node
-    std::vector<BPlusTreeNode *> childSet;  // set of all child nodes of the node
-    std::vector<offsetNum> valSet;          // all vals' offsetnum
+    int keysNum;                            // keys的数量
+    bool isLeaf;                            // 是否为叶子节点
+    BPlusTreeNode *parent;                  // 双亲节点
+    BPlusTreeNode *nextLeafNode;            // 下一个叶子结点
+    std::vector<KeyType> keySet;            // 在节点中设置所有key
+    std::vector<BPlusTreeNode *> childSet;  // 设置所有的孩子节点
+    std::vector<offsetNum> valSet;          // 所有offsetNum值设置
 
 
     BPlusTreeNode(int degree, bool isNewLeaf = false);
     ~BPlusTreeNode();
 
-    bool IsRoot();                                       // whether is the tree's root
-    bool SearchInNode(KeyType key, int &index);          // search a key in the node and return the position
-    BPlusTreeNode *Splite(KeyType &key, offsetNum &val); // splite the node by a key
-    int AddKey(KeyType key, offsetNum val = 0);          // add a key and corresponding offsetnum and return the position
-    bool Delete(int index);                              // delete a key
+    bool IsRoot();                                       // 是否为根节点
+    bool SearchInNode(KeyType key, int &index);          // 在节点中搜索key,返回其位置
+    BPlusTreeNode *Splite(KeyType &key, offsetNum &val); // 通过key来讲改节点分割
+    int AddKey(KeyType key, offsetNum val = 0);          // 添加一个key和相应的offsetnum,并返回其值
+    bool Delete(int index);                              // 删除一个key
 };
 
 template<typename KeyType>
+//b+树类
 class BPlusTree {
 private:
-    BPlusTreeNode<KeyType> *root;        // root of the tree
-    std::string fileName;                // the file where create the BPlusTree index
-    int treeHeight;                      // height of the tree. e.g.Empty tree with height 0
+    BPlusTreeNode<KeyType> *root;        // b+树的根节点
+    std::string fileName;                // 创建B+树索引的文件
+    int treeHeight;                      // 树的高度,若为空则为0
     int m_degree;
     int m_keySize;
     fileNode *m_fileNode;
@@ -135,10 +137,10 @@ public:
     BPlusTree(int degree, int keySize, std::string file);
     ~BPlusTree();
 
-    BPlusTreeNode<KeyType> *SearchInTree(KeyType key, int &index); // search the key in the tree and return the position
-    bool InsertKey(KeyType key, offsetNum val);   // insert a key into the tree
-    bool DeleteKey(KeyType key);                  // delete a key
-    void DropTree(BPlusTreeNode<KeyType> *node);  // drop the tree
+    BPlusTreeNode<KeyType> *SearchInTree(KeyType key, int &index); // 搜索key值得位置并返回其位置
+    bool InsertKey(KeyType key, offsetNum val);   // 向树中插入一个key
+    bool DeleteKey(KeyType key);                  // 删除一个key
+    void DropTree(BPlusTreeNode<KeyType> *node);  // 删除节点及其子节点
 
     void ReadAllDisk();
     void ReadDiskNode(blockNode *btmp);
@@ -153,10 +155,10 @@ private:
 //-----------------------class member function of BPlusTreeNode----------------------------------------------
 
 /**
- * constructor: create a BPlusTree node
+ * constructor: 创建b+树节点
  * 
- * @parm degree: the degree of the new node
- * @parm isNewLeaf: flag that the node whether is a leaf node
+ * @parm degree: 新节点的度数
+ * @parm isNewLeaf: 标注该节点是否为叶子节点
  * 
  */
 template<typename KeyType>
@@ -179,8 +181,8 @@ BPlusTreeNode<KeyType>::~BPlusTreeNode()
 {}
 
 /**
- * return true if the node is the root 
- * and false otherwise
+ * 若是根节点->返回1
+ * 不是->返回0
  * 
  */
 template<typename KeyType>
@@ -190,14 +192,13 @@ inline bool BPlusTreeNode<KeyType>::IsRoot()
 }
 
 /**
- * search the key in the node
+ * 搜索在node中的key值
  * 
- * @parm key: the key value we want to search
- * @parm index: the position of the key we find, 
- *              or the position it should be if not 
- *              int the node
+ * @parm key: 想要搜索的key值
+ * @parm index: 我们想找到key值的位置,
+ *              或者应当存在的位置 若不在node中
  * 
- * @return whether we find the key in the node
+ * @return 返回是否在node中找到key值
  * 
  */
 template<typename KeyType>
@@ -255,11 +256,11 @@ bool BPlusTreeNode<KeyType>::SearchInNode(KeyType key, int &index)
 }
 
 /**
- * splite the node by a key
+ * 使用key值来分离节点
  * 
- * @parm key: the key add to the parent node
+ * @parm key: 添加到双亲节点的key值
  * 
- * @return PBlusTreeNode: new node we get after the splite
+ * @return PBlusTreeNode: 分离之后获得的新节点
  * 
  */
 template<typename KeyType>
@@ -278,7 +279,7 @@ BPlusTreeNode<KeyType> *BPlusTreeNode<KeyType>::Splite(KeyType &key, offsetNum &
         exit(0);
     }
 
-    //copy the right half hand of the node to the new node
+    
     //考虑这些向量已经大小已经超出范围
     int begin = m_degree / 2 + 1;
     key = keySet[begin];
@@ -314,13 +315,13 @@ BPlusTreeNode<KeyType> *BPlusTreeNode<KeyType>::Splite(KeyType &key, offsetNum &
 }
 
 /**
- * add a key into the node
+ * 将key值添加至节点中
  * 
- * @parm key: the key we want to add
- * @parm val: the offsetnum of the key
+ * @parm key: 想要添加的key值
+ * @parm val: key值的offsetnum
  * 
- * @return int: the position of the key after function
- *              -1 if cannot add
+ * @return int: 添加完后的key值位置
+ *              -1 若添加失败
  * 
  */
 template<typename KeyType>
@@ -351,11 +352,11 @@ int BPlusTreeNode<KeyType>::AddKey(KeyType key, offsetNum val)
 
 
 /**
- * delete a key
+ * 删除一个key值
  * 
- * @pram index: the position of the key we want to delete
+ * @pram index: 想要删除的在节点中的位置
  * 
- * @return bool: wether succeed delete the key
+ * @return bool: 是否成功删除key值
  * 
  */
 template<typename KeyType>
@@ -417,14 +418,14 @@ BPlusTree<KeyType>::~BPlusTree()
 }
 
 /**
- * search the key and return the position
+ * 搜索key值并返回位置
  * 
- * @parm key: the key we want to find
- * @parm index: the position of the key in which
- *              the node we find contain the keys
+ * @parm key: 想要找到的key值
+ * @parm index: key值在
+ *              我们找到的包含key的节点的位置
  * 
- * @return BPlusTreeNode *: pointer to the node contain
- *                          the key we want to find
+ * @return BPlusTreeNode *: 包含键的节点的指针
+ *                          
  * 
  */
 template<typename KeyType>
@@ -439,7 +440,7 @@ BPlusTreeNode<KeyType> *BPlusTree<KeyType>::SearchInTree(KeyType key, int &index
     }
     searchNode = root;
 
-    //go to leaf node
+    //到叶子节点
     while(searchNode->isLeaf == false)
     {
         if(searchNode->SearchInNode(key, index) == true)
@@ -455,10 +456,10 @@ BPlusTreeNode<KeyType> *BPlusTree<KeyType>::SearchInTree(KeyType key, int &index
 }
 
 /**
- * insert a key into the tree
+ * 向树中插入一个key值
  * 
- * @parm key: the key we want to insert
- * @parm val: the offsetnum of the record
+ * @parm key: 我们想添加的key值
+ * @parm val: 记录的offsetnum
  * 
  */
 template<typename KeyType>
@@ -484,10 +485,10 @@ bool BPlusTree<KeyType>::InsertKey(KeyType key, offsetNum val)
 }
 
 /**
- * splite the parameter node. If its parent node is full
- * after then, splite its parent. Do this process recursively
+ * 若父节点是否已满,则分裂参数节点
+ * 然后，分裂它的父节点(递归过程)
  * 
- * @parm node: the first node to splite
+ * @parm node: 第一个需要分裂的节点
  * 
  */
 template<typename KeyType>
@@ -527,11 +528,11 @@ void BPlusTree<KeyType>::RecursivelySplite(BPlusTreeNode<KeyType> *node)
 }
 
 /**
- * delete a key in the tree
+ * 删除树中的一个key值
  * 
- * @parm key: the key we want to delete
+ * @parm key: 想要删除的key值
  * 
- * @return bool: true if succeed delete and false if not
+ * @return bool: 成功删除为true,反之为false
  * 
  */
 template<typename KeyType>
@@ -553,11 +554,11 @@ bool BPlusTree<KeyType>::DeleteKey(KeyType key)
 }
 
 /**
- * after delete key, modify the tree if need, recursively
+ * 删除键之后，如果需要，递归地修改树
  * 
- * @parm node: the node we need to modify
+ * @parm node: 我们想要修改的节点
  * 
- * @return bool: whther succeed
+ * @return bool: 是否成功
  * 
  */
 template <typename KeyType>
@@ -596,7 +597,7 @@ bool BPlusTree<KeyType>::RecursivelyCombine(BPlusTreeNode<KeyType> *node)
     }
     else if(node->isLeaf == true)
     {
-        //leaf node but not root
+        //是叶子节点但不是根节点
         if(index == parent->keysNum)
         {
             //如果node节点是父亲节点的最后一个孩子
@@ -737,9 +738,9 @@ bool BPlusTree<KeyType>::RecursivelyCombine(BPlusTreeNode<KeyType> *node)
 }
 
 /**
- * drop a node and its all descendants
+ * 删除一个节点及其所有子节点
  * 
- * @parm node: the node you want to delete
+ * @parm node: 想要删除的节点
  * 
  */
 template<typename KeyType>
@@ -760,9 +761,9 @@ void BPlusTree<KeyType>::DropTree(BPlusTreeNode<KeyType> *node)
 }
 
 /**
- * read a node from disk
+ * 从硬盘中读取节点
  * 
- * @parm btmp: the node we need to read in
+ * @parm btmp: 我们想要读入的节点
  * 
  */
 template<typename KeyType>
@@ -788,7 +789,7 @@ void BPlusTree<KeyType>::ReadDiskNode(blockNode *btmp)
 }
 
 /**
- * read the whole tree from disk
+ * 从硬盘中读取所有树
  * 
  */
 template<typename KeyType>

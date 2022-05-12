@@ -13,36 +13,43 @@ Attribute::~Attribute()
     //default dtor
 }
 
+//返回索引
 string Attribute::getIndex()
 {
 	return index;
 }
 
+//设置索引
 void Attribute::setIndex(string other)
 {
 	index = other;
 }
 
+//返回名字
 string Attribute::getName()
 {
 	return name;
 }
 
+//返回是否为unique
 bool Attribute::getUnique()
 {
 	return ifUnique;
 }
 
+//设置为unique
 void Attribute::setUnique(bool other)
 {
 	ifUnique = other;
 }
 
+//返回数据类型
 int Attribute::getType()
 {
 	return type;
 }
 
+//通过名称,数据类型,是否unique创建attribute
 Attribute::Attribute(string nameInput, int typeInput, bool ifUniqueInput) : 
     name(nameInput),
     type(typeInput),
@@ -61,6 +68,7 @@ IndexInfo::~IndexInfo()
     //default dtor
 }
 
+//通过索引名,表名,属性名,数据类型创建索引信息
 IndexInfo::IndexInfo(string indexInput, string tableInput, string attributeInput, int typeInput) : 
     indexName(indexInput),
     tableName(tableInput),
@@ -68,21 +76,25 @@ IndexInfo::IndexInfo(string indexInput, string tableInput, string attributeInput
     type(typeInput)
 {}
 
+//返回属性
 string IndexInfo::getAttribute()
 {
 	return Attribute;
 }
 
+//返回属性名
 string IndexInfo::getIndexName()
 {
 	return indexName;
 }
 
+//返回表名
 string IndexInfo::getTableName()
 {
 	return tableName;
 }
 
+//返回数据类型
 int IndexInfo::getType()
 {
 	return type;
@@ -93,6 +105,7 @@ IndexManager::IndexManager()
     //default ctor
 }
 
+//通过api初始化indexManager
 IndexManager::IndexManager(API *apiInput)
 {
     api = apiInput;
@@ -104,6 +117,7 @@ IndexManager::IndexManager(API *apiInput)
     }
 }
 
+//删除indexManager
 IndexManager::~IndexManager()
 {
     //write back to the disk
@@ -133,6 +147,7 @@ IndexManager::~IndexManager()
     }
 }
 
+//通过文件路径filePath和数据类型type创建index
 void IndexManager::createIndex(string filePath, int type)
 {
     int keySize = getKeySize(type);
@@ -155,6 +170,7 @@ void IndexManager::createIndex(string filePath, int type)
     }
 }
 
+//通过文件路径filePath和数据类型type删除index
 void IndexManager::dropIndex(string filePath, int type)
 {
     if(type == TYPE_INT)
@@ -201,6 +217,7 @@ void IndexManager::dropIndex(string filePath, int type)
     }
 }
 
+//通过文件路径filePath和数据类型type搜索key值所在的indexNode
 offsetNum IndexManager::searchIndex(string filePath, string key, int type)
 {
     setKey(type, key);
@@ -251,6 +268,7 @@ offsetNum IndexManager::searchIndex(string filePath, string key, int type)
     }
 }
 
+//通过文件路径filePath,key值,blockOffset,数据类型type插入index
 void IndexManager::insertIndex(string filePath, string key, offsetNum blockOffset, int type)
 {
     setKey(type, key);
@@ -295,6 +313,7 @@ void IndexManager::insertIndex(string filePath, string key, offsetNum blockOffse
     }
 }
 
+//通过文件路径filePath和数据类型type,用key值来删除index
 void IndexManager::deleteIndexByKey(string filePath, string key, int type)
 {
     setKey(type, key);
@@ -340,12 +359,14 @@ void IndexManager::deleteIndexByKey(string filePath, string key, int type)
     }
 }
 
+//返回深度值
 int IndexManager::getDegree(int type)
 {
     int degree = bm.getBlockSize() / (getKeySize(type) + sizeof(offsetNum));
     return (degree % 2 == 0) ? degree - 1 : degree;
 }
 
+//返回key的数据类型
 int IndexManager::getKeySize(int type)
 {
     if(type == TYPE_FLOAT)
@@ -361,6 +382,7 @@ int IndexManager::getKeySize(int type)
     }
 }
 
+//给key值分配数据类型
 void IndexManager::setKey(int type,string key)
 {
     stringstream ss;
