@@ -423,8 +423,300 @@ def modify_field(tbname,alterFieldName,columns_list):
     else:
         print("未找到数据库.")
 
+#插入
+def insert_record(table_name, current_database, current_dbname, columns_list, multiFlag):
+    #if not check_Constraint(columns_list,table_name):    #columns应为[dict]
+        #print ("Constraint Error")
+        #return False
+    #找到标识
+    flag = False
+    #检查表名是否存在
+    if multiFlag:
+        if table_name in current_database.sheetnames:
+            table = current_database[table_name]
+            #columns_list本身为二维数组
+            #columns为一维数组
+            
+            table_columns = table.max_column
+            for columns in columns_list:
+                table_rows = table.max_row
+                for column in columns:
+                    #查找匹配的列头是否与columns[0]匹配
+                    for i in range(table_columns):
+                        if i == 0:
+                            flag = False
+                        if flag == True:
+                            break
+                        if table.cell(row=1,column=i+1).value == column[0]:
+                            #在最后一行插入一行值为columns[1]的数据
+                            table.cell(row=table_rows+1,column=i+1).value = column[1]
+                            #成功插入一行
+                            print (column[0]+':'+column[1]+"插入成功.")
+                            flag = True
+                        elif i == table_columns-1 and table.cell(row=1,column=i+1).value != column[0]:
+                            #没有找到对应的列头
+                            print("该表中不存在该字段.")
+        else:
+            print("该表不在数据库中.")
+    else:
+        if table_name in current_database.sheetnames:
+            table = current_database[table_name]
+            #columns_list本身为二维数组
+            #columns为一维数组
+            table_rows = table.max_row
+            table_columns = table.max_column
+            for columns in columns_list:
+                #查找匹配的列头是否与columns[0]匹配
+                for i in range(table_columns):
+                    if i == 0:
+                        flag = False
+                    if flag == True:
+                        break
+                    if table.cell(row=1,column=i+1).value == columns[0]:
+                        #在最后一行插入一行值为columns[1]的数据
+                        table.cell(row=table_rows+1,column=i+1).value = columns[1]
+                        #成功插入一行
+                        print (columns[0]+':'+columns[1]+"插入成功.")
+                        flag = True
+                    elif i == table_columns-1 and table.cell(row=1,column=i+1).value != columns[0]:
+                        #没有找到对应的列头
+                        print("该表中不存在该字段.")
+        else:
+            print("该表不在数据库中.")
+    current_database.save(db_path+current_dbname+'.xlsx')
+
+#删除记录
+def delete_record(table_name, current_database, current_dbname, condition_list):
+    #检查表名是否存在
+    if table_name in current_database.sheetnames:
+        table = current_database[table_name]
+        table_rows = table.max_row
+        table_columns = table.max_column
+        #二维数组
+        delete_rows = []
+        #一维数组
+        delete_rows_list = []
+        #查找与condition_list相符的行删除
+        j = 0
+        for condition in condition_list:
+            #等于判断
+            if '=' in condition:
+                field_column = 0
+                condition = condition.split('=')
+                #找到列头=condition[0]的列号
+                for i in range(table_columns):
+                    if i == 0:
+                        flag = False
+                    if flag == True:
+                        break
+                    if table.cell(row=1,column=i+1).value == condition[0]:
+                        field_column = i+1
+                        flag = True
+                    elif i == table_columns-1 and table.cell(row=1,column=i+1).value != condition[0]:
+                        print("该表中不存在该字段.")
+                        return
+                #若在第field_column列找到了condition[1]的值，记录在delete_rows[j]中
+                for i in range(table_rows):
+                    if table.cell(row=i+1,column=field_column).value == condition[1]:
+                        delete_rows_list.append(i+1)
+            #大于判断
+            elif '>' in condition:
+                field_column = 0
+                condition = condition.split('>')
+                #找到列头>condition[0]的列号
+                for i in range(table_columns):
+                    if i == 0:
+                        flag = False
+                    if flag == True:
+                        break
+                    if table.cell(row=1,column=i+1).value == condition[0]:
+                        field_column = i+1
+                        flag = True
+                    elif i == table_columns-1 and table.cell(row=1,column=i+1).value != condition[0]:
+                        print("该表中不存在该字段.")
+                        return
+                #若在第field_column列找到了大于condition[1]的值，记录在delete_rows[j]中
+                for i in range(table_rows):
+                    if table.cell(row=i+1,column=field_column).value > condition[1]:
+                        delete_rows_list.append(i+1)
+            #小于判断
+            elif '<' in condition:
+                field_column = 0
+                condition = condition.split('<')
+                #找到列头<condition[0]的列号
+                for i in range(table_columns):
+                    if i == 0:
+                        flag = False
+                    if flag == True:
+                        break
+                    if table.cell(row=1,column=i+1).value == condition[0]:
+                        field_column = i+1
+                        flag = True
+                    elif i == table_columns-1 and table.cell(row=1,column=i+1).value != condition[0]:
+                        print("该表中不存在该字段.")
+                        return
+                #若在第field_column列找到了小于condition[1]的值，记录在delete_rows[j]中
+                for i in range(table_rows):
+                    if table.cell(row=i+1,column=field_column).value < condition[1]:
+                        delete_rows_list.append(i+1)
+            delete_rows.append(delete_rows_list)
+            j += 1
 
         
+        #delete_rows没有元素
+        if len(delete_rows) == 0:
+            print("没有找到符合条件的记录.")
+            return
+        #将若有元素在delete_rows中每个组都出现，得出新的list
+        for i in range(len(delete_rows)):
+            for j in range(len(delete_rows[0])):
+                flag = False
+                for k in range(len(delete_rows[i])):
+                    if delete_rows[0][j] == delete_rows[i][k]:
+                        flag = False
+                        break
+                    else:
+                        flag = True
+            if flag:
+                delete_rows[0].remove(delete_rows[0][j])
+        #按照delete_rows[0]删除行
+        for i in range(len(delete_rows[0])):
+            table.delete_rows(delete_rows[0][i])
+            print("第"+str(delete_rows[0][i]-1)+"行删除成功.")
+        #保存xlsx
+        current_database.save(db_path+current_dbname+'.xlsx')
+    else:
+        print("该表不在数据库中.")
+
+#修改记录
+def update_record(table_name,current_database,current_dbname,cols,condition_list,multiFlag):
+    #检查表名是否存在
+    if table_name in current_database.sheetnames:
+        table = current_database[table_name]
+        #查找符合condition_list的行进行修改
+        table_rows = table.max_row
+        table_columns = table.max_column
+        #二维数组
+        update_rows = []
+        #一维数组
+        update_rows_list = []
+        #查找与condition_list相符的行修改
+        j = 0
+        for condition in condition_list:
+            #等于判断
+            if '=' in condition:
+                field_column = 0
+                condition = condition.split('=')
+                #找到列头=condition[0]的列号
+                for i in range(table_columns):
+                    if i == 0:
+                        flag = False
+                    if flag == True:
+                        break
+                    if table.cell(row=1,column=i+1).value == condition[0]:
+                        field_column = i+1
+                        flag = True
+                    elif i == table_columns-1 and table.cell(row=1,column=i+1).value != condition[0]:
+                        print("该表中不存在该字段.")
+                        return
+                #若在第field_column列找到了condition[1]的值，记录在update_rows[j]中
+                for i in range(table_rows):
+                    if table.cell(row=i+1,column=field_column).value == condition[1]:
+                        update_rows_list.append(i+1)
+            #大于判断
+            elif '>' in condition:
+                field_column = 0
+                condition = condition.split('>')
+                #找到列头>condition[0]的列号
+                for i in range(table_columns):
+                    if i == 0:
+                        flag = False
+                    if flag == True:
+                        break
+                    if table.cell(row=1,column=i+1).value == condition[0]:
+                        field_column = i+1
+                        flag = True
+                    elif i == table_columns-1 and table.cell(row=1,column=i+1).value != condition[0]:
+                        print("该表中不存在该字段.")
+                        return
+                #若在第field_column列找到了大于condition[1]的值，记录在update_rows[j]中
+                for i in range(table_rows):
+                    if table.cell(row=i+1,column=field_column).value > condition[1]:
+                        update_rows_list.append(i+1)
+            #小于判断
+            elif '<' in condition:
+                field_column = 0
+                condition = condition.split('<')
+                #找到列头<condition[0]的列号
+                for i in range(table_columns):
+                    if i == 0:
+                        flag = False
+                    if flag == True:
+                        break
+                    if table.cell(row=1,column=i+1).value == condition[0]:
+                        field_column = i+1
+                        flag = True
+                    elif i == table_columns-1 and table.cell(row=1,column=i+1).value != condition[0]:
+                        print("该表中不存在该字段.")
+                        return
+                #若在第field_column列找到了小于condition[1]的值，记录在update_rows[j]中
+                for i in range(table_rows):
+                    if table.cell(row=i+1,column=field_column).value < condition[1]:
+                        update_rows_list.append(i+1)
+            update_rows.append(update_rows_list)
+            j += 1
+        #update_rows没有元素
+        if len(update_rows) == 0:
+            print("没有找到符合条件的记录.")
+            return
+
+        #将若有元素在update_rows中每个组都出现，得出新的list
+        for i in range(len(update_rows)):
+            for j in range(len(update_rows[0])):
+                flag = False
+                for k in range(len(update_rows[i])):
+                    if update_rows[0][j] == update_rows[i][k]:
+                        flag = False
+                        break
+                    else:
+                        flag = True
+            if flag:
+                update_rows[0].remove(update_rows[0][j])
+
+        #按照update_rows[0]修改行
+        for i in range(len(update_rows[0])):
+            if table_name in current_database.sheetnames:
+                table = current_database[table_name]
+                #columns_list本身为二维数组
+                #columns为一维数组
+                for columns in cols:
+                    #查找匹配的列头是否与columns[0]匹配
+                    for i in range(table_columns):
+                        if i == 0:
+                            flag = False
+                        if flag == True:
+                            break
+                        if table.cell(row=1,column=i+1).value == columns[0]:
+                            #在指定行插入一行值为columns[1]的数据
+                            table.cell(row=update_rows[0][i],column=i+1).value = columns[1]
+                            #成功插入一行
+                            print (columns[0]+':'+columns[1]+"插入成功.")
+                            flag = True
+                        elif i == table_columns-1 and table.cell(row=1,column=i+1).value != columns[0]:
+                            #没有找到对应的列头
+                            print("该表中不存在该字段.")
+                #保存xlsx文件
+                current_database.save(db_path+current_dbname+'.xlsx')
+            else:
+                print("该表不在数据库中.")
+
+
+        
+        
+        
+
+
+
 
 
 def Initialization():
@@ -439,67 +731,6 @@ def Initialization():
     db = load_workbook("data/system.xlsx")
     permission_tb_col = ['database char[50] pk unique','select char','insert char','delete char','update char']
     creat_table('permission', db, 'system',permission_tb_col)
-
-
-
-#插入
-def insert(table_name, current_database, current_dbname, columns_list):
-    if not check_Constraint(columns_list,table_name):    #columns应为[dict]
-        print ("Constraint Error")
-        return False
-    table = current_database[table_name]
-    for columns in columns_list:
-        table_rows = table.max_row
-        table_columns = table.max_column
-        length = len(columns)
-        # print length
-        for i in range(length):
-            column = re.search('\((.*?)\)', columns[i], re.S).group(1)
-            column_list = column.split(',')
-            chk_len = len(column_list)
-            if chk_len != table_columns:
-                print ('插入失败，请检查输入的数据数量是否与列数量对应。')
-                return
-
-            else:
-                for j in range(chk_len):
-                    table.cell(row=table_rows + i + 1, column=j + 1).value = column_list[j]
-                current_dbname = db_path + current_dbname + '.xlsx'
-                current_database.save(current_dbname)
-                print ("数据插入完成。")
-
-#DELETE FROM table_nmae WHERE column_name = 'Value'
-def delect(table_name,current_database,current_dbname,columns_list):  #columns_list={'name1':'value1','name2':'value2'}
-
-    table = current_database[table_name]
-    table_rows = table.max_row  #行
-    table_columns = table.max_column    #列
-    length = len(columns_list)
-    delect_row_num = [x for x in range(2,table_rows+1)]
-    columns_name=[]
-    for cell in list(table.rows)[0]:
-        columns_name.append(cell.value)
-    for key in columns_list:
-        flag = 0
-        for i in range(len(columns_name)):    #判断colmuns_list 是否有 not in colmus中的
-            if columns_name[i] == key:
-                flag = 1
-        if flag == 0:   #输入的列名不存在
-            print("Unknown column '{}' in 'where clause'".format(key))
-            return
-    for key in columns_list:
-        column_num = columns_name.index(key)
-        for i in delect_row_num[::-1]:  #倒着来
-            if table.cell(row=i, column=column_num+1).value != columns_list[key]:
-                delect_row_num.remove(i)
-    if len(delect_row_num) > 0:
-        for i in delect_row_num[::-1]:
-            #print i,table_rows
-            table.delete_rows(int(i))
-    else:
-        print("find 0 to delect.")
-    current_database.save(db_path + current_dbname + '.xlsx')
-    print("删除完成，影响{}行".format(len(delect_row_num)))
 
 #UPDATE table_name SET column1=value1,column2=value2,... WHERE some_column=some_value;
 def update(table_name,current_database,current_dbname,columns_list,update_columns_list):
@@ -970,6 +1201,7 @@ def query(sql,tag=''):
         if user != 'admin':
             return  False
         del_permission(sql_word[5], sql_word[3], sql_word[1])
+    #插入数据
     elif operate == 'insert':   #INSERT INTO table_name col1=val1,col2=val2&col3=val3,col4=val4
         table_name = sql_word[2]
         """
@@ -977,25 +1209,59 @@ def query(sql,tag=''):
         sql2 = re.findall('\((.*)\)')[0]
         query(sql2,tag='insert')
         """
+        multiFlag = False
 
         columns_list = []
         if '&' in sql:
+            multiFlag = True
             cols = sql_word[3].split('&')   #[{xx},{xx}] 多组
-            for p in range(len(cols)):
-                col = cols[p]
-                c = col.split(',')
-                for i in range(len(c)):
-                    c[i] = c[i].split('=')
-                cols[p] = dict(c)
-            columns_list = cols
+            for i in range(len(cols)):
+                cols[i] = cols[i].split(',')
+            for i in range(len(cols)):
+                for j in range(len(cols[i])):
+                    cols[i][j] = cols[i][j].split('=')
         else:
             cols = sql_word[3].split(',')
             for i in range(len(cols)):
                 cols[i] = cols[i].split('=')
-            columns_list.append(dict(cols))
-        insert(table_name,using_db,using_dbname,columns_list)
+        insert_record(table_name,using_db,using_dbname,cols,multiFlag)
+    #删除记录
+    elif operate == 'delete':
+        table_name = sql_word[2]
+        if 'where' == sql_word[3]:
+            if '&' in sql:
+                cols = sql_word[4].split('&')
+                for p in range(len(cols)):
+                    col = cols[p]
+                    condition_list = col.split(',')
+            else:
+                condition_list = sql_word[4].split(',')
+            delete_record(table_name,using_db,using_dbname,condition_list)
+        else:
+            print ("[!]Syntax Error.")
+
+    #修改记录
     elif operate == 'update':
-        return
+        table_name = sql_word[1]
+        #处理set后的=赋值部分
+        if 'set' == sql_word[2]:
+            multiFlag = False
+            columns_list = []
+            cols = sql_word[3].split(',')
+            for i in range(len(cols)):
+                cols[i] = cols[i].split('=')
+        else:
+            print ("[!]Syntax Error.")
+        #处理where后的条件部分
+        if 'where' == sql_word[4]:
+            condition_list = sql_word[5].split(',')
+        else:
+            print ("[!]Syntax Error.")
+        #调用函数update
+        update_record(table_name,using_db,using_dbname,cols,condition_list,multiFlag)
+
+            
+
     elif operate == 'help':
         if sql_word[1] == 'database':
             show_db()
