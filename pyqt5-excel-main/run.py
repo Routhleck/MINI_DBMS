@@ -46,6 +46,7 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         self.pushButtonanalyse.clicked.connect(self.analyseProcess)
         self.pushButtonmakalo.clicked.connect(self.makaloProcess)
         self.pushButton_link.clicked.connect(self.linkProcess)
+        self.pushButton_submit.clicked.connect(self.submit)
 
         self.statusbar.showMessage('Mini DBMS by group 10')
         self.comboBoxfiletype.addItems(['xlsx','xls'])
@@ -67,6 +68,10 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         #==========context===
         self.infos = {}
         self.infos_bak = {}
+
+    def submit():
+        #将lineEdit_input的内容传入函数中
+        
 
     def use_palette(self):
         self.setWindowTitle("设置背景图片")
@@ -310,8 +315,6 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
             try:
                 self.infos = self.assign_dict(self.infos_bak,self.infos)
                 self.splitThread = splitThread(self.infos)
-                self.splitThread.split_signal.connect(self.set_progressbar_value)
-                self.splitThread.split_signal_lcd.connect(self.set_lcdnumber_value)
                 self.splitThread.start()
             except:
                 QMessageBox.about(self, "hi,Mini DBMS by group 10", '拆分{}出现错误'.format(base_name))
@@ -324,10 +327,6 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         webbrowser.open('https://blog.csdn.net/guicai1647855685?spm=1010.2135.3001.5421')
     def linkProcess(self):
         webbrowser.open('https://github.com/makalo')
-    def set_progressbar_value(self, value):
-        self.progressBar.setValue(value)
-    def set_lcdnumber_value(self,value):
-        self.lcdNumber.display(value)
 
 
 
