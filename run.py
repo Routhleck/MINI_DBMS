@@ -96,7 +96,14 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
                 print(password)
                 print('再次点击进行验证')
         elif not username == '' and not password == '' and not flagLogin:
+<<<<<<< Updated upstream
             flagFirst, flagLogin = main_interpreter.userLogin(username, password, flagFirst, flagLogin)
+=======
+            flagFirst,flagLogin = main_interpreter.userLogin(username,password,flagFirst,flagLogin)
+            if not flagLogin:
+                username = ''
+                password = ''
+>>>>>>> Stashed changes
         elif flagLogin:
             main_interpreter.interpreter(self.lineEdit_input.text())
 
