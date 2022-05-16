@@ -790,15 +790,13 @@ def login(user, username, password, flagFirst, flagLogin):
         print("Login Success!Welcome {}! 😊".format(username))
         user = username
         flagLogin = True
+        flagFirst = False
         return user, flagFirst, flagLogin
     else:
         flagFirst = True
-
+        flagLogin = False
         print("user not exist or password is wrong!😣 Try again.")
         return user, flagFirst, flagLogin
-
-        print ("user not exist or password is wrong!😣 Try again.")
-        return user,flagFirst,flagLogin
 
 
 
