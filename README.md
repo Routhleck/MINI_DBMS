@@ -29,33 +29,49 @@ username:admin
 username:admin
 ## 创建数据库
 create database {database_name}
+eg.: create database test_db
 ## 删除数据库
 drop database {database_name}
+eg.: drop database test_db
 ## 使用数据库
 use database {database_name}
+eg.: use database test_db
 ## 创建表
 create table {table_name} ({column_name} {data_type} {PK,null...},{column_name} {data_type} {PK,null...}...)
+eg.: create table test (v1 int PK null,v2 int)
 ## 删除表
 drop table {table_name}
+eg.: drop table test
 ## 添加字段
 alter {table_name} add ({column_name} {data_type} {PK,null...})
+eg.: alter test add (v3 int)
 ## 删除字段
 alter {table_name} drop ({column_name})
+eg.: alter test drop (v3)
 ## 修改字段
 alter {table_name} modify {alter_field_name} ({column_name} {data_type} {PK,null...}) 
+eg.: alter test modify v1 (v3 int PK null)
 ## 记录插入
 insert into {table_name} {column_name=value,column_name=value,...)
+eg.: insert into test v1=1,v2=2
 ## 记录插入（多重）
 insert into {table_name} {column_name=value,column_name=value,...&column_name=value,column_name=value,...)
+eg.: insert into test v3=2,v2=4&v3=3,v2=5
 ## 记录删除
 delete on {table_name} where {column_name=value或column_name>value或column_name<value}
+eg.: delete on test where v3=1
 ## 记录删除（多重）
 delete on {table_name} where {column_name=value或column_name>value或column_name<value&column_name=value或column_name>value或column_name<value&..}
+eg.: delete on test where v3=1&v2=2
 ## 记录修改
-update {table_name} set (column_name=value,column_name=value,...) where {column_name=value或column_name>value或column_name<value（可多重）}
+update {table_name} set column_name=value,column_name=value,... where {column_name=value或column_name>value或column_name<value（可多重）}
+eg.: update test set v3=4,v2=3 where v3=2
 ## 选择全部
 select * from {table_name}
+eg.: select * from test
 ## 选择指定列
 select {column_name} from {table_name}
+eg.:select v3 from test
 ## 选择where条件
 select * 或{column_name} from {table_name} where {column_name=value或column_name>value或column_name<value（可多重）}
+eg.: select * from test where v3=4
