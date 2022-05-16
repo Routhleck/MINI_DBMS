@@ -98,13 +98,8 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         elif not username == '' and not password == '' and not flagLogin:
             flagFirst, flagLogin = main_interpreter.userLogin(username, password, flagFirst, flagLogin)
             if not flagLogin:
-<<<<<<< Updated upstream
                 username = ''
                 password = ''
-=======
-                username == ''
-                password == ''
->>>>>>> Stashed changes
         elif flagLogin:
             main_interpreter.interpreter(self.lineEdit_input.text())
 
