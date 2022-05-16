@@ -131,7 +131,7 @@ def query(sql,tag=''):
     elif operate == 'create':
         if sql_word[1] == 'database':
             try:
-                dbms_function.creat_db(sql_word[2])
+                creat_db(sql_word[2])
             except:
                 print ("[!]Create Error")
         elif sql_word[1] == 'table':
