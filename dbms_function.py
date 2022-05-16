@@ -623,87 +623,91 @@ def select(columns,table_name,using_dbname,using_db,limit={},predicate='and', sy
     if using_dbname == '':
         print ("please choose databse!")
         return
-    table = using_db[table_name]
-    #print columns
-    if columns == '*' and len(limit) == 0:
-        columns_name = list(iter_rows(table))[0]
-        table_print = PrettyTable(columns_name)
-        for i in range(1,len(list(iter_rows(table)))):
-            table_print.add_row(list(iter_rows(table))[i])
-        table_print.reversesort = True
-        if tag == 'view':
-            print (table_print)
-            return list(iter_rows(table))   #view
-        if tag == 'insert':
-            return list(iter_rows(table))
-        else:
-            print(table_print)
-    else:
-        sel_cols = columns.split(',')   #*的情况
-        rows_list = list(iter_rows(table))  #所有的行
-        cols = rows_list[0]
-        col_pos = []
-        limit_pos = []
-        print_row = []
-        limit_cols = list(limit)
-        symbol = '==' if symbol == '=' else symbol
-        if columns[0] != '*':
-            for i in range(len(sel_cols)):
-                col_pos.append(cols.index(sel_cols[i])) #要查的列的列号
-        else:
-            sel_cols = list(iter_rows(table))[0]
-            col_pos = range(len(cols))
-        for i in range(len(limit)):
-            limit_pos.append(cols.index(limit_cols[i])) #where的列
-        for i in range(1, len(rows_list)):
-            match = 0
-            if predicate == 'in':
-                match_list = limit[limit_cols[0]]
-                for j in len(match_list):
-                    if rows_list[i][limit_pos[0]] == match_list[j]:
-                        print_row.append(i)
-            if predicate == 'like':
-                like_word = re.findall('(.*)\%',limit[limit_cols[0]])
-                if like_word in rows_list[i][limit_pos[0]]:
-                    print_row.append(i)
+    #查找表是否在数据库中
+    if table_name in using_db.sheetnames:
+        table = using_db[table_name]
+        #print columns
+        if columns == '*' and len(limit) == 0:
+            columns_name = list(iter_rows(table))[0]
+            table_print = PrettyTable(columns_name)
+            for i in range(1,len(list(iter_rows(table)))):
+                table_print.add_row(list(iter_rows(table))[i])
+            table_print.reversesort = True
+            if tag == 'view':
+                print (table_print)
+                return list(iter_rows(table))   #view
+            if tag == 'insert':
+                return list(iter_rows(table))
             else:
-                for j in range(len(limit_pos)): #通过eval实现比较运算
-                    if eval("'" + rows_list[i][limit_pos[j]] + "'" + symbol + "'" + limit[limit_cols[j]] + "'"):
-                        match += 1
-                if predicate == None:
-                    print_row.append(i)
-                if predicate == 'and' and match == len(limit_pos):  #and时要全部匹配
-                    print_row.append(i)     #符合条件的行号
-                if predicate == 'or' and match > 0: #or时至少一个匹配
-                    print_row.append(i)
+                print(table_print)
+        else:
+            sel_cols = columns.split(',')   #*的情况
+            rows_list = list(iter_rows(table))  #所有的行
+            cols = rows_list[0]
+            col_pos = []
+            limit_pos = []
+            print_row = []
+            limit_cols = list(limit)
+            symbol = '==' if symbol == '=' else symbol
+            if columns[0] != '*':
+                for i in range(len(sel_cols)):
+                    col_pos.append(cols.index(sel_cols[i])) #要查的列的列号
+            else:
+                sel_cols = list(iter_rows(table))[0]
+                col_pos = range(len(cols))
+            for i in range(len(limit)):
+                limit_pos.append(cols.index(limit_cols[i])) #where的列
+            for i in range(1, len(rows_list)):
+                match = 0
+                if predicate == 'in':
+                    match_list = limit[limit_cols[0]]
+                    for j in len(match_list):
+                        if rows_list[i][limit_pos[0]] == match_list[j]:
+                            print_row.append(i)
+                if predicate == 'like':
+                    like_word = re.findall('(.*)\%',limit[limit_cols[0]])
+                    if like_word in rows_list[i][limit_pos[0]]:
+                        print_row.append(i)
+                else:
+                    for j in range(len(limit_pos)): #通过eval实现比较运算
+                        if eval("'" + rows_list[i][limit_pos[j]] + "'" + symbol + "'" + limit[limit_cols[j]] + "'"):
+                            match += 1
+                    if predicate == None:
+                        print_row.append(i)
+                    if predicate == 'and' and match == len(limit_pos):  #and时要全部匹配
+                        print_row.append(i)     #符合条件的行号
+                    if predicate == 'or' and match > 0: #or时至少一个匹配
+                        print_row.append(i)
 
-        table_print = PrettyTable(sel_cols)
-        for i in range(len(print_row)):
-            add_rows = []
-            for x in col_pos:
-                add_rows.append(rows_list[print_row[i]][x])
-            table_print.add_row(add_rows)
-        table_print.reversesort = True
-        if tag == 'view':
-            return table_print
-        elif tag == 'insert':
-            return table_print
-        elif tag == 'nesting':
-            tmpdb = using_db
-            table = tmpdb['tmp']
-            for i in range(len(sel_cols)):
-                table.cell(row=0,column=i+1).value = sel_cols[i]
+            table_print = PrettyTable(sel_cols)
             for i in range(len(print_row)):
                 add_rows = []
                 for x in col_pos:
                     add_rows.append(rows_list[print_row[i]][x])
-                for j in range(len(add_rows)):
-                    table.cell(row=i+2,column=j+1).value = add_rows[j]
-            tmpdb.save("data/" + using_dbname + ".xlsx")
+                table_print.add_row(add_rows)
+            table_print.reversesort = True
+            if tag == 'view':
+                return table_print
+            elif tag == 'insert':
+                return table_print
+            elif tag == 'nesting':
+                tmpdb = using_db
+                table = tmpdb['tmp']
+                for i in range(len(sel_cols)):
+                    table.cell(row=0,column=i+1).value = sel_cols[i]
+                for i in range(len(print_row)):
+                    add_rows = []
+                    for x in col_pos:
+                        add_rows.append(rows_list[print_row[i]][x])
+                    for j in range(len(add_rows)):
+                        table.cell(row=i+2,column=j+1).value = add_rows[j]
+                tmpdb.save("data/" + using_dbname + ".xlsx")
 
-        else:
-            #table_print.reversesort = True
-            print(table_print)
+            else:
+                #table_print.reversesort = True
+                print(table_print)
+    else:
+        print("该表不在数据库中.")
 
 #grant select on test_tb for testuser
 def set_permission(user,database,action):
