@@ -5,7 +5,7 @@ import bisect
 import queue
 
 # try:
-# bad performance on my laptop(windows xp)
+# bad performance on my laptop(Windows xp)
 # #from blist import blist
 # except:
 # pass

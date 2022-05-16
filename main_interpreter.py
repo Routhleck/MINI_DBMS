@@ -1,16 +1,11 @@
-# -*- coding: utf-8 -*
-
 import os
 import re
-
 from openpyxl import *
-
 import dbms_function
 
 db_path = 'data/'
 # view_path = 'view/'
 user = ''
-
 using_dbname = ''
 using_db = Workbook()
 
@@ -99,7 +94,7 @@ def get_command():
     :return: None
     """
     command = input("[👉]> ") if not using_dbname else input("[{}🚩]> ".format(using_dbname))
-    # hcommand = command.lower()
+    # command = command.lower()
     # print command
     return command.strip()
 
