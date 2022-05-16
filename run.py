@@ -15,7 +15,7 @@ from utils import assign_style_qt, get_merge_cell_list
 
 username = ''
 password = ''
-flagFirst = False
+flagFirst = True
 flagLogin = False
 filePath = 'data/'
 
@@ -77,10 +77,10 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         global password
         global flagFirst
         global flagLogin
-        if not flagFirst:
+        if flagFirst:
             print('请先登录')
             print('用户名:')
-            flagFirst = True
+            flagFirst = False
         elif username == '':
             if self.lineEdit_input.text() == '':
                 print('\n用户名为空，请重新输入:')
@@ -98,8 +98,13 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         elif not username == '' and not password == '' and not flagLogin:
             flagFirst, flagLogin = main_interpreter.userLogin(username, password, flagFirst, flagLogin)
             if not flagLogin:
+<<<<<<< Updated upstream
                 username = ''
                 password = ''
+=======
+                username == ''
+                password == ''
+>>>>>>> Stashed changes
         elif flagLogin:
             main_interpreter.interpreter(self.lineEdit_input.text())
 
