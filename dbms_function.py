@@ -793,8 +793,13 @@ def login(user, username, password, flagFirst, flagLogin):
         return user, flagFirst, flagLogin
     else:
         flagFirst = True
+<<<<<<< Updated upstream
         print("user not exist or password is wrong!😣 Try again.")
         return user, flagFirst, flagLogin
+=======
+        print ("user not exist or password is wrong!😣 Try again.")
+        return user,flagFirst,flagLogin
+>>>>>>> Stashed changes
 
 
 def check_login(username, password):
