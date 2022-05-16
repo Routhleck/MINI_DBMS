@@ -189,7 +189,6 @@ def query(sql, tag=''):
                                            using_dbname=using_dbname, using_db=using_db)
             except:
                 print("[!]Error")
-
     # 选择操作select
     elif operate == 'select':
         pos = 0

@@ -1,9 +1,9 @@
-from openpyxl import *
+import hashlib
 import os
 import re
-from index import *
+
+from openpyxl import *
 from prettytable import PrettyTable
-import hashlib
 
 db_path = 'data/'
 
@@ -797,9 +797,8 @@ def login(user, username, password, flagFirst, flagLogin):
         print("user not exist or password is wrong!😣 Try again.")
         return user, flagFirst, flagLogin
 
-        print ("user not exist or password is wrong!😣 Try again.")
-        return user,flagFirst,flagLogin
-
+        print("user not exist or password is wrong!😣 Try again.")
+        return user, flagFirst, flagLogin
 
 
 def check_login(username, password):

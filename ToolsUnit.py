@@ -90,8 +90,6 @@ def split_excel(path, base_info, signal=None):
 
 
 if __name__ == "__main__":
-    # base_info = {'省级产业集聚区地下水污染防治有关工作开展情况调度表':[[2,2],[3,'last']],
-    #             '以化工等行业为主的产业集聚区':[]}
     base_info = {'其他': [], '数据字典': [], 'Sheet1': [[3, 2], [4, 33]]}
     wbs_split, names_split = split_excel('20210223.xlsx', base_info)
     root = './debug'
