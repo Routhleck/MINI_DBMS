@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*
 
-from glob import glob
-from openpyxl import *
-import  os
+import os
 import re
-from index import *
-from prettytable import PrettyTable
-import hashlib
+
+from openpyxl import *
+
 import dbms_function
+
 db_path = 'data/'
-#view_path = 'view/'
+# view_path = 'view/'
 user = ''
 
 using_dbname = ''
@@ -58,30 +57,34 @@ def help():
     9.显示信息：help table/view/index
     """)
 
-#使用数据库
+
+# 使用数据库
 def use_db(dbname):
     global using_dbname
     global using_db
-    #数据库不存在
+    # 数据库不存在
     if os.path.exists(db_path + dbname + '.xlsx'):
         if dbms_function.check_permission(user, dbname, 'use'):
             using_dbname = dbname
-            print(dbname+"数据库已使用.")
-            using_db = load_workbook(db_path+dbname+'.xlsx')
+            print(dbname + "数据库已使用.")
+            using_db = load_workbook(db_path + dbname + '.xlsx')
         else:
             print("你没有权限使用该数据库,请使用admin账户赋予权限.")
     else:
-        print("数据库不存在")        
+        print("数据库不存在")
 
-#显示所有数据库
+    # 显示所有数据库
+
+
 def show_db():
     print("All database:")
-    dbs = os.listdir(db_path)   #第二种方法，从保存数据库信息的库中查询
+    dbs = os.listdir(db_path)  # 第二种方法，从保存数据库信息的库中查询
     for db in dbs:
         if '.DS' not in db and db != 'index':
             print("[*] " + db[:-5])
 
-#创建数据库
+
+# 创建数据库
 def creat_db(dbname):
     dbpath = 'data/' + dbname + '.xlsx'
     database = Workbook()
@@ -89,15 +92,17 @@ def creat_db(dbname):
     dbms_function.create_tb_in_tbinfo(dbname)
     print(u"数据库创建操作执行成功")
 
+
 def get_command():
     """
     从控制台获取命令
     :return: None
     """
     command = input("[👉]> ") if not using_dbname else input("[{}🚩]> ".format(using_dbname))
-    #hcommand = command.lower()
-    #print command
+    # hcommand = command.lower()
+    # print command
     return command.strip()
+
 
 def Initialization():
     if not os.path.exists(db_path):
@@ -105,88 +110,92 @@ def Initialization():
     if not os.path.exists("data/table_information.xlsx"):
         Workbook().save("data/table_information.xlsx")
     if os.path.exists("data/system.xlsx"):
-        print ("Initializating......")
+        print("Initializating......")
     else:
         dbms_function.creat_db('system')
     db = load_workbook("data/system.xlsx")
-    permission_tb_col = ['database char[50] pk unique','select char','insert char','delete char','update char']
-    dbms_function.creat_table('permission', db, 'system',permission_tb_col)
+    permission_tb_col = ['database char[50] pk unique', 'select char', 'insert char', 'delete char', 'update char']
+    dbms_function.creat_table('permission', db, 'system', permission_tb_col)
 
-def query(sql,tag=''):
+
+def query(sql, tag=''):
     sql_word = sql.split(" ")
     if len(sql_word) < 2:
-        print ("[!] Wrong query!")
+        print("[!] Wrong query!")
         return
     operate = sql_word[0].lower()
-    #使用数据库
+    # 使用数据库
     if operate == 'use':
         if sql_word[1] == 'database':
             try:
                 use_db(sql_word[2])
             except:
-                print ("[!]Error")
+                print("[!]Error")
         else:
-            print ("[!]Syntax Error.\neg:>use database dbname")
-    #创建数据库、表、视图、索引
+            print("[!]Syntax Error.\neg:>use database dbname")
+    # 创建数据库、表、视图、索引
     elif operate == 'create':
         if sql_word[1] == 'database':
             try:
                 creat_db(sql_word[2])
             except:
-                print ("[!]Create Error")
+                print("[!]Create Error")
         elif sql_word[1] == 'table':
             columns_list = re.findall('\((.*)\)', sql)[0].split(',')
-            print (columns_list, using_dbname)
+            print(columns_list, using_dbname)
             try:
                 dbms_function.creat_table(sql_word[2], using_db, using_dbname, columns_list)
             except:
-                print ("[!]Error")
-        elif sql_word[1] == 'view': #creat view test1 as select * from user
+                print("[!]Error")
+        elif sql_word[1] == 'view':  # creat view test1 as select * from user
             viewname = sql_word[2]
             sql = ' '.join(sql_word[4:])
-            dbms_function.view(viewname,sql)
+            dbms_function.view(viewname, sql)
 
         elif sql_word[1] == 'index':
             return
         else:
-            print ("[!]Syntax Error.")
-    #删除数据库或表
+            print("[!]Syntax Error.")
+    # 删除数据库或表
     elif operate == 'drop':
         if sql_word[1] == 'database':
             try:
                 dbms_function.drop_db(sql_word[2])
             except:
-                print ("[!]Error")
+                print("[!]Error")
         if sql_word[1] == 'table':
             try:
-                dbms_function.drop_table(sql_word[2],using_dbname,using_db)
+                dbms_function.drop_table(sql_word[2], using_dbname, using_db)
             except:
-                print ("[!]Error")
-    #字段操作alter
+                print("[!]Error")
+    # 字段操作alter
     elif operate == 'alter':
-        #添加字段
+        # 添加字段
         if sql_word[2] == 'add':
             columns_list = re.findall('\((.*)\)', sql)[0].split(',')
             try:
-                dbms_function.add_field(tbname = sql_word[1],columns_list=columns_list,using_dbname=using_dbname,using_db=using_db)
+                dbms_function.add_field(tbname=sql_word[1], columns_list=columns_list, using_dbname=using_dbname,
+                                        using_db=using_db)
             except:
-                print ("[!]Error")
-        #删除字段
+                print("[!]Error")
+        # 删除字段
         elif sql_word[2] == 'drop':
             columns_list = re.findall('\((.*)\)', sql)[0].split(',')
             try:
-                dbms_function.drop_field(tbname = sql_word[1],columns_list=columns_list,using_dbname=using_dbname,using_db=using_db)
+                dbms_function.drop_field(tbname=sql_word[1], columns_list=columns_list, using_dbname=using_dbname,
+                                         using_db=using_db)
             except:
-                print ("[!]Error")
-        #修改字段
+                print("[!]Error")
+        # 修改字段
         elif sql_word[2] == 'modify':
             columns_list = re.findall('\((.*)\)', sql)[0].split(',')
             try:
-                dbms_function.modify_field(tbname = sql_word[1], alterFieldName = sql_word[3],columns_list=columns_list,using_dbname=using_dbname,using_db=using_db)
+                dbms_function.modify_field(tbname=sql_word[1], alterFieldName=sql_word[3], columns_list=columns_list,
+                                           using_dbname=using_dbname, using_db=using_db)
             except:
-                print ("[!]Error")
+                print("[!]Error")
 
-    #选择操作select
+    # 选择操作select
     elif operate == 'select':
         pos = 0
         for i in range(len(sql_word)):
@@ -194,14 +203,14 @@ def query(sql,tag=''):
                 pos = i
         if pos == 3:
             sql2 = sql_word[3][1:-1]
-            query(sql2,tag='nesting')
+            query(sql2, tag='nesting')
             sql_word[3] = 'tmp'
             sql = ' '.join(sql_word)
 
         columns = sql_word[1]
         table_name = sql_word[3]
         if len(sql_word) > 4:
-            #try:
+            # try:
             limit = sql_word[5].split()
             predicate = 'and'
             symbol = '='
@@ -212,10 +221,10 @@ def query(sql,tag=''):
                 limit = sql_word[5].split('|')
                 predicate = 'or'
             elif '>' in sql_word[5]:
-                #limit = sql_word[5].split()
+                # limit = sql_word[5].split()
                 symbol = '>'
             elif '<' in sql_word[5]:
-                #limit = sql_word[5].split()
+                # limit = sql_word[5].split()
                 symbol = '<'
             elif len(sql_word) > 6:
                 if sql_word[6] == 'in':
@@ -224,27 +233,28 @@ def query(sql,tag=''):
                 if sql_word[6] == 'like':
                     limit = [sql_word[5] + '=' + sql_word[7]]
                     predicate = 'like'
-            #except:
-                #limit = [].append(sql_word[5])
-            #print limit
+            # except:
+            # limit = [].append(sql_word[5])
+            # print limit
             for i in range(len(limit)):
                 limit[i] = limit[i].split(symbol)
             limit = dict(limit)
-            return dbms_function.select(columns, table_name,using_dbname,using_db, limit, predicate=predicate, symbol=symbol, tag=tag)
-        else:   #没where的情况
-            return dbms_function.select(columns, table_name,using_dbname,using_db, tag=tag)
-    #授予权限
+            return dbms_function.select(columns, table_name, using_dbname, using_db, limit, predicate=predicate,
+                                        symbol=symbol, tag=tag)
+        else:  # 没where的情况
+            return dbms_function.select(columns, table_name, using_dbname, using_db, tag=tag)
+    # 授予权限
     elif operate == 'grant':
         if user != 'admin':
-            return  False
+            return False
         dbms_function.set_permission(sql_word[5], sql_word[3], sql_word[1])
-    #取消权限
+    # 取消权限
     elif operate == 'revoke':
         if user != 'admin':
-            return  False
+            return False
         dbms_function.del_permission(sql_word[5], sql_word[3], sql_word[1])
-    #插入数据
-    elif operate == 'insert':   #INSERT INTO table_name col1=val1,col2=val2&col3=val3,col4=val4
+    # 插入数据
+    elif operate == 'insert':  # INSERT INTO table_name col1=val1,col2=val2&col3=val3,col4=val4
         table_name = sql_word[2]
         """
         #INSERT INTO table_name (select x from xx)
@@ -256,7 +266,7 @@ def query(sql,tag=''):
         columns_list = []
         if '&' in sql:
             multiFlag = True
-            cols = sql_word[3].split('&')   #[{xx},{xx}] 多组
+            cols = sql_word[3].split('&')  # [{xx},{xx}] 多组
             for i in range(len(cols)):
                 cols[i] = cols[i].split(',')
             for i in range(len(cols)):
@@ -266,8 +276,8 @@ def query(sql,tag=''):
             cols = sql_word[3].split(',')
             for i in range(len(cols)):
                 cols[i] = cols[i].split('=')
-        dbms_function.insert_record(table_name,using_db,using_dbname,cols,multiFlag)
-    #删除记录
+        dbms_function.insert_record(table_name, using_db, using_dbname, cols, multiFlag)
+    # 删除记录
     elif operate == 'delete':
         table_name = sql_word[2]
         if 'where' == sql_word[3]:
@@ -278,14 +288,14 @@ def query(sql,tag=''):
                     condition_list = col.split(',')
             else:
                 condition_list = sql_word[4].split(',')
-            dbms_function.delete_record(table_name,using_db,using_dbname,condition_list)
+            dbms_function.delete_record(table_name, using_db, using_dbname, condition_list)
         else:
-            print ("[!]Syntax Error.")
+            print("[!]Syntax Error.")
 
-    #修改记录
+    # 修改记录
     elif operate == 'update':
         table_name = sql_word[1]
-        #处理set后的=赋值部分
+        # 处理set后的=赋值部分
         if 'set' == sql_word[2]:
             multiFlag = False
             columns_list = []
@@ -293,51 +303,51 @@ def query(sql,tag=''):
             for i in range(len(cols)):
                 cols[i] = cols[i].split('=')
         else:
-            print ("[!]Syntax Error.")
-        #处理where后的条件部分
+            print("[!]Syntax Error.")
+        # 处理where后的条件部分
         if 'where' == sql_word[4]:
             condition_list = sql_word[5].split(',')
         else:
-            print ("[!]Syntax Error.")
-        #调用函数update
-        dbms_function.update_record(table_name,using_db,using_dbname,cols,condition_list,multiFlag)
+            print("[!]Syntax Error.")
+        # 调用函数update
+        dbms_function.update_record(table_name, using_db, using_dbname, cols, condition_list, multiFlag)
 
-            
-    #帮助指令
+
+    # 帮助指令
     elif operate == 'help':
         if sql_word[1] == 'database':
             dbms_function.show_db()
         if sql_word[1] == 'table':
             usdbnm = using_dbname
             dbms_function.use_db('table_information')
-            #若sql_word[2]存在，则指定表
+            # 若sql_word[2]存在，则指定表
             if len(sql_word) > 2 and sql_word[2] != '':
                 tbname = sql_word[2]
-                dbms_function.select('*',usdbnm,{'table':tbname})
+                dbms_function.select('*', usdbnm, {'table': tbname})
             else:
-                print ('[!]Syntax Error.\neg:>help table table_name')
+                print('[!]Syntax Error.\neg:>help table table_name')
         if sql_word[1] == 'view':
             view_name = sql_word[2]
             dbms_function.use_db('view')
-            dbms_function.select('sql','sql',{'viewnamw':view_name})
+            dbms_function.select('sql', 'sql', {'viewnamw': view_name})
         if sql_word[1] == 'index':
-            print ("All Index:")
+            print("All Index:")
             indexs = os.listdir('data/index/')  # 第二种方法，从保存数据库信息的库中查询
             for index in indexs:
                 if '.DS' not in index:
-                    print ("[*] " + index[:-5])
+                    print("[*] " + index[:-5])
     else:
-        print ("[!]Syntax Error.")
+        print("[!]Syntax Error.")
 
 
 def run():
-    #Initialization()
+    # Initialization()
     global user
-    #welcome()
+    # welcome()
     user = dbms_function.login(user)
     while True:
         command = get_command()
-        #print command
+        # print command
         if command == 'quit' or command == 'exit':
             print("[🍻] Thanks for using Mini DBMS. Bye~~")
             exit(0)
@@ -346,15 +356,17 @@ def run():
         else:
             query(command)
 
-#若没有system和table_information库，则使用此方法创建创建
-#if __name__ == '__main__':
-    #Initialization()
-    #run()
-#登录
-def userLogin(username,password,flagFirst,flagLogin):
+
+# 若没有system和table_information库，则使用此方法创建创建
+# if __name__ == '__main__':
+# Initialization()
+# run()
+# 登录
+def userLogin(username, password, flagFirst, flagLogin):
     global user
-    user,flagFirst,flagLogin = dbms_function.login(user,username,password,flagFirst,flagLogin)
-    return flagFirst,flagLogin
+    user, flagFirst, flagLogin = dbms_function.login(user, username, password, flagFirst, flagLogin)
+    return flagFirst, flagLogin
+
 
 def interpreter(command):
     if command == 'quit' or command == 'exit':

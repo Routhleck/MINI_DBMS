@@ -1,26 +1,25 @@
 import os
 import sys
-import time
-from typing_extensions import Self
-from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtChart import QChart, QChartView, QPieSeries, QPieSlice
-from PyQt5.QtCore import Qt, QTimer, QCoreApplication, QSettings,pyqtSignal,QObject
-from PyQt5.QtGui import QPixmap, QPainter
-from PyQt5.QtWidgets import QFileDialog, QTableWidgetItem, QGridLayout, QSplashScreen
-from PyQt5.QtWidgets import QVBoxLayout,QMessageBox
-from PyQt5.QtGui import QTextCursor
-import UI_lan
-from ToolsPackage import splitThread
-from openpyxl import load_workbook
-from utils import get_column_letter,assign_style_qt,get_merge_cell_list
-import webbrowser
+
 import qdarkstyle
+from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtGui import QTextCursor
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QTableWidgetItem
+from openpyxl import load_workbook
+
+import UI_lan
 import main_interpreter
+from utils import assign_style_qt, get_merge_cell_list
+
 username = ''
 password = ''
 flagFirst = False
 flagLogin = False
 filePath = 'data/'
+
+
 class Stream(QObject):
     """Redirects console output to text widget."""
     newText = pyqtSignal(str)
@@ -28,6 +27,7 @@ class Stream(QObject):
     def write(self, text):
         QtWidgets.QApplication.processEvents()
         self.newText.emit(str(text))
+
 
 class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
 
@@ -39,8 +39,8 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         else:
             self.bundle_dir = os.path.dirname(os.path.abspath(__file__))
         self.setupUi(self)
-        #self.setWindowIcon(QtGui.QIcon(self.bundle_dir + '/icons/icon.png'))
-        #self.setStyleSheet(open("Dark/darkstyle.qss", "r").read())
+        # self.setWindowIcon(QtGui.QIcon(self.bundle_dir + '/icons/icon.png'))
+        # self.setStyleSheet(open("Dark/darkstyle.qss", "r").read())
         # self.setStyleSheet(open("qss/1.qss", "r").read())
 
         self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
@@ -51,28 +51,28 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         self.pushButton_submit.clicked.connect(self.submit)
 
         self.statusbar.showMessage('Mini DBMS by group 10')
-        self.comboBoxfiletype.addItems(['xlsx','xls'])
+        self.comboBoxfiletype.addItems(['xlsx', 'xls'])
 
-        #==========log=====
+        # ==========log=====
         sys.stdout = Stream(newText=self.onUpdateText)
-        #==========log=====
+        # ==========log=====
 
-        #==========show====
+        # ==========show====
         self.flag_confirm = False
-        self.activate_file = [None,None]
+        self.activate_file = [None, None]
         self.comboBox_wb.activated.connect(self.wbActivated)
         self.comboBox_ws.activated.connect(self.wsActivated)
         self.tableWidget.itemClicked.connect(self.handleItemClick)
         self.pushButton_clear_idx.clicked.connect(self.clear_idx)
         self.pushButton_confirm_idx.clicked.connect(self.confirm_idx)
-        #==========show====
+        # ==========show====
 
-        #==========context===
+        # ==========context===
         self.infos = {}
         self.infos_bak = {}
 
     def submit(self):
-        #将lineEdit_input的内容传入函数中
+        # 将lineEdit_input的内容传入函数中
         global username
         global password
         global flagFirst
@@ -96,22 +96,16 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
                 print(password)
                 print('再次点击进行验证')
         elif not username == '' and not password == '' and not flagLogin:
-            flagFirst,flagLogin = main_interpreter.userLogin(username,password,flagFirst,flagLogin)
+            flagFirst, flagLogin = main_interpreter.userLogin(username, password, flagFirst, flagLogin)
         elif flagLogin:
             main_interpreter.interpreter(self.lineEdit_input.text())
-        
-
-        
-
-        
-
-        
 
     def use_palette(self):
         self.setWindowTitle("设置背景图片")
         window_pale = QtGui.QPalette()
-        window_pale.setBrush(self.backgroundRole(),   QtGui.QBrush(QtGui.QPixmap(self.bundle_dir + '/icons/bg.jpeg')))
+        window_pale.setBrush(self.backgroundRole(), QtGui.QBrush(QtGui.QPixmap(self.bundle_dir + '/icons/bg.jpeg')))
         self.setPalette(window_pale)
+
     def onUpdateText(self, text):
         """Write console output to text widget."""
         cursor = self.textBrowserlog.textCursor()
@@ -120,9 +114,8 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         self.textBrowserlog.setTextCursor(cursor)
         self.textBrowserlog.ensureCursorVisible()
 
-
     def openFileNamesDialog(self):
-        #获取filePath所有xlsx文件存储到files中
+        # 获取filePath所有xlsx文件存储到files中
         global filePath
         files = []
         for file in os.listdir(filePath):
@@ -149,7 +142,7 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         """
         if files:
             for file in files:
-                #仅保留file的文件名且去除后缀
+                # 仅保留file的文件名且去除后缀
                 self.listWidget.addItem(os.path.basename(file).split('.')[0])
 
     def clearwidget(self):
@@ -163,6 +156,7 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         self.comboBox_ws.clear()
         self.comboBox_r1.clear()
         self.comboBox_r2.clear()
+
     def clearcontext_all(self):
         self.tableWidget.clear()
         self.tableWidget.setColumnCount(0)
@@ -173,26 +167,29 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         self.comboBox_ws.clear()
         self.comboBox_r1.clear()
         self.comboBox_r2.clear()
+
     def clearcontext_show(self):
         self.tableWidget.clear()
         self.tableWidget.setColumnCount(0)
         self.tableWidget.setRowCount(0)
+
     def clear_idx(self):
         self.comboBox_x.clear()
         self.comboBox_y.clear()
         self.comboBox_r1.clear()
         self.comboBox_r2.clear()
-    def assign_dict(self,dict1,dict2):
-        for k,v in dict1.items():
-            if isinstance(v,dict):
+
+    def assign_dict(self, dict1, dict2):
+        for k, v in dict1.items():
+            if isinstance(v, dict):
                 dict_tmp = dict()
-                dict2[k] = self.assign_dict(v,dict_tmp)
+                dict2[k] = self.assign_dict(v, dict_tmp)
             else:
                 dict2[k] = v
         return dict2
 
     def confirm_idx(self):
-        self.infos_bak = self.assign_dict(self.infos,self.infos_bak)
+        self.infos_bak = self.assign_dict(self.infos, self.infos_bak)
 
         x = self.comboBox_x.itemText(self.comboBox_x.currentIndex())
         y = self.comboBox_y.itemText(self.comboBox_y.currentIndex())
@@ -213,26 +210,25 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
 
             if self.checkBox_book.isChecked():
                 print('book')
-                key_idx = [x,y]
-                rg = [r1,'last']
+                key_idx = [x, y]
+                rg = [r1, 'last']
                 for wb_k in self.infos_bak.keys():
                     ws_keys = self.infos_bak[wb_k]['sheet_names']
                     for ws_k in ws_keys.keys():
-                        self.infos_bak[wb_k]['sheet_names'][ws_k] = [key_idx,rg]
+                        self.infos_bak[wb_k]['sheet_names'][ws_k] = [key_idx, rg]
             elif self.checkBox_sheet.isChecked():
                 print('sheet')
-                key_idx = [x,y]
-                rg = [r1,'last']
+                key_idx = [x, y]
+                rg = [r1, 'last']
                 ws_keys = self.infos_bak[wb]['sheet_names']
                 for ws_k in ws_keys.keys():
-                    self.infos_bak[wb]['sheet_names'][ws_k] = [key_idx,rg]
+                    self.infos_bak[wb]['sheet_names'][ws_k] = [key_idx, rg]
             else:
                 print('cell')
-                key_idx = [x,y]
-                rg = [r1,r2]
-                self.infos_bak[wb]['sheet_names'][ws] = [key_idx,rg]
+                key_idx = [x, y]
+                rg = [r1, r2]
+                self.infos_bak[wb]['sheet_names'][ws] = [key_idx, rg]
             self.flag_confirm = True
-
 
     def selectall(self):
         self.listWidget.selectAll()
@@ -251,7 +247,7 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
             else:
                 self.infos = {}
                 for i in list(items):
-                    file_path = str(filePath + i.text()+'.xlsx')
+                    file_path = str(filePath + i.text() + '.xlsx')
                     wb = load_workbook(filename=file_path)
                     name = os.path.split(file_path)[-1]
 
@@ -260,7 +256,7 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
                     sheets_dict = {}
                     for s in sheet_names:
                         sheets_dict[s] = []
-                    self.infos[name] = {'path':file_path,'sheet_names':sheets_dict}
+                    self.infos[name] = {'path': file_path, 'sheet_names': sheets_dict}
                     wb.close()
                 for k in self.infos.keys():
                     self.comboBox_wb.addItem(k)
@@ -273,7 +269,8 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
 
                 self.show_excel()
         print('可以预览文件')
-    def wbActivated(self,index):
+
+    def wbActivated(self, index):
         self.clearcontext_show()
         wb_k = self.comboBox_wb.itemText(index)
         sheets = list(self.infos[wb_k]['sheet_names'].keys())
@@ -284,28 +281,27 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         self.activate_file[1] = list(self.infos[wb_k]['sheet_names'].keys())[0]
         self.show_excel()
 
-    def wsActivated(self,index):
+    def wsActivated(self, index):
         ws_k = self.comboBox_ws.itemText(index)
         self.activate_file[1] = ws_k
         self.show_excel()
 
-    def handleItemClick(self,item):
+    def handleItemClick(self, item):
         cont = item.text()
         self.comboBox_x.clear()
         self.comboBox_y.clear()
         self.comboBox_r1.clear()
-        row = item.row()+1
-        column = item.column()+1
-        #=======对合并的单元格取idx
+        row = item.row() + 1
+        column = item.column() + 1
+        # =======对合并的单元格取idx
         for p in self.merge_position:
             if row == p[0] and column == p[1]:
-                row = row + (p[2]-p[0])
+                row = row + (p[2] - p[0])
                 break
-        #=======对合并的单元格取idx
+        # =======对合并的单元格取idx
         self.comboBox_x.addItem(str(row))
         self.comboBox_y.addItem(str(column))
-        self.comboBox_r1.addItem(str(row+1))
-
+        self.comboBox_r1.addItem(str(row + 1))
 
     def show_excel(self):
         self.merge_position = []
@@ -318,45 +314,43 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         self.tableWidget.setColumnCount(num_column)
         self.tableWidget.setRowCount(num_row)
 
-        #======合并单元格=======
+        # ======合并单元格=======
         merge_idx = ws.merged_cells
         merge_idx = get_merge_cell_list(merge_idx)
 
         for i in range(len(merge_idx)):
             m_idx = merge_idx[i]
-            self.tableWidget.setSpan(m_idx[0]-1, m_idx[1]-1, m_idx[2]-m_idx[0]+1, m_idx[3]-m_idx[1]+1)
-            self.merge_position.append([m_idx[0],m_idx[1],m_idx[2]])#[x1,y1,range]
-        #======合并单元格=======
+            self.tableWidget.setSpan(m_idx[0] - 1, m_idx[1] - 1, m_idx[2] - m_idx[0] + 1, m_idx[3] - m_idx[1] + 1)
+            self.merge_position.append([m_idx[0], m_idx[1], m_idx[2]])  # [x1,y1,range]
+        # ======合并单元格=======
 
-        #======单元格大小=======
-        for i in range(1,num_row+1):
+        # ======单元格大小=======
+        for i in range(1, num_row + 1):
             h = ws.row_dimensions[i].height
             if h is not None:
-                self.tableWidget.setRowHeight(i-1,h)
+                self.tableWidget.setRowHeight(i - 1, h)
         # for i in range(1,num_column+1):
         #     w = ws.column_dimensions[get_column_letter(i)].width
         #     if w is not None:
         #         self.tableWidget.setColumnWidth(i-1,w)
-        #======单元格大小=======
+        # ======单元格大小=======
 
         self.comboBox_r2.clear()
-        for i in range(1,num_row+1):
-            self.comboBox_r2.addItem(str(num_row-i+1))
+        for i in range(1, num_row + 1):
+            self.comboBox_r2.addItem(str(num_row - i + 1))
             row_sizes = []
-            for j in range(1,num_column+1):
+            for j in range(1, num_column + 1):
                 cell = ws.cell(row=i, column=j)
                 if cell.value is not None:
                     item = QTableWidgetItem(str(cell.value))
-                    assign_style_qt(item,cell)
+                    assign_style_qt(item, cell)
                 else:
                     item = QTableWidgetItem()
-                self.tableWidget.setItem(i-1, j-1, item)
+                self.tableWidget.setItem(i - 1, j - 1, item)
 
         # self.tableWidget.resizeColumnsToContents()
         # self.tableWidget.resizeRowsToContents()
         wb.close()
-
-
 
 
 app = QtWidgets.QApplication(sys.argv)
@@ -366,4 +360,3 @@ window.openFileNamesDialog()
 app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 window.show()
 sys.exit(app.exec_())
-

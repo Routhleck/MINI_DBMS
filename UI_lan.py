@@ -25,18 +25,18 @@ class Ui_MainWindow(object):
         self.groupBox_3 = QtWidgets.QGroupBox(self.tab)
         self.groupBox_3.setGeometry(QtCore.QRect(10, 10, 511, 721))
         self.groupBox_3.setObjectName("groupBox_3")
-        #设置line edit
+        # 设置line edit
         self.lineEdit_input = QtWidgets.QLineEdit(self)
         self.lineEdit_input.setGeometry(QtCore.QRect(10, 20, 491, 31))
         self.lineEdit_input.setObjectName("lineEdit_input")
-        #lineEdit_input移动到右下角
-        self.lineEdit_input.move(555,735)
-        #设置push button提交按钮
+        # lineEdit_input移动到右下角
+        self.lineEdit_input.move(555, 735)
+        # 设置push button提交按钮
         self.pushButton_submit = QtWidgets.QPushButton(self)
         self.pushButton_submit.setGeometry(QtCore.QRect(10, 20, 71, 31))
         self.pushButton_submit.setObjectName("pushButton_submit")
-        self.pushButton_submit.move(1050,735)
-        #设置push button提交按钮文本
+        self.pushButton_submit.move(1050, 735)
+        # 设置push button提交按钮文本
         self.pushButton_submit.setText("Submit")
 
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.groupBox_3)

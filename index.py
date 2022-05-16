@@ -4,12 +4,11 @@
 import bisect
 import queue
 
-#try:
+# try:
 # bad performance on my laptop(windows xp)
 # #from blist import blist
-#except:
-    #pass
-
+# except:
+# pass
 
 
 from itertools import zip_longest
@@ -408,7 +407,7 @@ class BPTree(object):
         leveldict = self.levels()
         keys = leveldict.keys()
         for k in keys:
-            print (' '.join(str(e) for e in leveldict[k]).center(width))
+            print(' '.join(str(e) for e in leveldict[k]).center(width))
         return leveldict
 
     def __setitem__(self, k, v):
@@ -424,9 +423,12 @@ class BPTree(object):
     def __delitem__(self, k):
         self._delete(self.root, k)
 
+
 def BPTree_search(a):
     b = BPTree(3)
     return b.search(b.root, a)
+
+
 def test_BPTree(test):
     b = BPTree(3)
     kv = [
@@ -446,7 +448,7 @@ def test_BPTree(test):
     for k, v in test:
         b[k] = v
     return b.pprint()
-    #n, i = b.search(b.root, 'ten')
+    # n, i = b.search(b.root, 'ten')
     """
     print n,i
     print 'min key: ', b.min()
@@ -466,7 +468,8 @@ def test_BPTree(test):
     print 'iteritems(min, max) :', list(b.iteritems(3.4, 7.9))
     """
 
+
 #################################### END #######################################
 
 if __name__ == '__main__':
-	test_BPTree()
+    test_BPTree()
