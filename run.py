@@ -356,30 +356,12 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
         # self.tableWidget.resizeRowsToContents()
         wb.close()
 
-    def SplitProcess(self):
-        if not self.flag_confirm:
-            QMessageBox.about(self, "hi,Mini DBMS by group 10", '请先选择文件并load文件,并选择拆分关键词')
-        else:
-            try:
-                self.infos = self.assign_dict(self.infos_bak,self.infos)
-                self.splitThread = splitThread(self.infos)
-                self.splitThread.start()
-            except:
-                QMessageBox.about(self, "hi,Mini DBMS by group 10", '拆分{}出现错误'.format(base_name))
-        self.flag_confirm = False
-    def mergeProcess(self):
-        QMessageBox.about(self, "hi,Mini DBMS by group 10", '此功能为付费功能')
-    def analyseProcess(self):
-        QMessageBox.about(self, "hi,Mini DBMS by group 10", '此功能为付费功能')
-    def makaloProcess(self):
-        webbrowser.open('https://blog.csdn.net/guicai1647855685?spm=1010.2135.3001.5421')
-    def linkProcess(self):
-        webbrowser.open('https://github.com/makalo')
 
 
 
 app = QtWidgets.QApplication(sys.argv)
 window = anaxcelhandler()
+window.openFileNamesDialog()
 # setup stylesheet
 app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 window.show()
