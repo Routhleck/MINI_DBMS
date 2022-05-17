@@ -100,3 +100,8 @@ eg.:select v3 from test
 select * 或{column_name} from {table_name} where {column_name=value或column_name>value或column_name<value（可多重）}
 
 eg.: select * from test where v3=4
+
+## 注册用户
+signup {username} {password}
+
+eg.: signup admin admin
