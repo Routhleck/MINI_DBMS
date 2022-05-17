@@ -1,3 +1,4 @@
+from collections import UserList
 import hashlib
 import os
 import re
@@ -7,6 +8,26 @@ from prettytable import PrettyTable
 
 db_path = 'data/'
 
+def welcome():
+    """
+    欢迎界面/字符画
+    :return:
+    """
+    print("""
+          ##############################################
+          
+                https://github.com/Routhleck/MINI_DBMS 
+                 _____  ____  __  __  _____ 
+                |  __ \|  _ \|  \/  |/ ____|
+                | |  | | |_) | \  / | (___  
+                | |  | |  _ <| |\/| |\___ \ 
+                | |__| | |_) | |  | |____) |
+                |_____/|____/|_|  |_|_____/ 
+                                                    
+                -> exit:退出 help:语法帮助 <-
+
+          ##############################################
+          """)
 
 # 在table_infomation中创建数据库对应的表
 def create_tb_in_tbinfo(dbname):
@@ -781,7 +802,19 @@ def check_syntax(sql):
                 return True
 
 
-def signup():
+def signup(username,password):
+    
+    db = load_workbook("data/system.xlsx")
+    table = db['user']
+    row = table.max_row + 1
+    UserList = list(iter_cols(table))[0][1:]
+    if username in UserList:
+        print("用户名已存在")
+        return
+    table.cell(row=row, column=1).value = username
+    table.cell(row=row, column=2).value = hashlib.md5(password.encode('utf-8')).hexdigest()
+    print("注册成功")
+    db.save("data/system.xlsx")
     return
 
 
@@ -790,12 +823,10 @@ def login(user, username, password, flagFirst, flagLogin):
         print("Login Success!Welcome {}! 😊".format(username))
         user = username
         flagLogin = True
+        welcome()
         return user, flagFirst, flagLogin
     else:
         flagFirst = True
-
-        print("user not exist or password is wrong!😣 Try again.")
-        return user, flagFirst, flagLogin
 
         print("user not exist or password is wrong!😣 Try again.")
         return user, flagFirst, flagLogin

@@ -10,26 +10,7 @@ using_dbname = ''
 using_db = Workbook()
 
 
-def welcome():
-    """
-    欢迎界面/字符画
-    :return:
-    """
-    print("""
-          ##############################################
-          
-                    https://github.com/LANVNAL 
-              _          _____  ____  __  __  _____ 
-             | |        |  __ \|  _ \|  \/  |/ ____|
-             | |  ______| |  | | |_) | \  / | (___  
-             | | |______| |  | |  _ <| |\/| |\___ \ 
-             | |____    | |__| | |_) | |  | |____) |
-             |______|   |_____/|____/|_|  |_|_____/ 
-                                                    
-                    -> exit:退出 help:语法帮助 <-
 
-          ##############################################
-          """)
 
 
 def help():
@@ -38,18 +19,87 @@ def help():
     :return:
     """
     print("""
-    1.创建表：create database dbname
-    2.创建数据库：create table tbname (id int PK null,user char[10] )
-    3.删除：DELETE FROM table_nmae WHERE column_name = 'Value'
-    4.更新：UPDATE table_name SET column1=value1,column2=value2,... WHERE some_column=some_value;
-    5.插入：INSERT INTO table_name col1=val1,col2=val2&col3=val3,col4=val4
-    6.查询：select a,b from table where c=x,d=x （与）
-           select a,b from table where c=x|d=x（或）
-           select a,b from table where c>x,d<x
-           支持like，in，支持子查询
-    7.权限：grant/revoke select on test_tb for testuser
-    8.索引：creat view view_name as select xx from xx
-    9.显示信息：help table/view/index
+    右下角输入指令，submit等于回车
+
+    点击数据库按钮刷新指令
+
+    点击全选选择所有数据库
+
+    点击加载加载数据
+
+    加载完成后可在data中查看每个数据库以及sheet
+
+    ## 登录管理员
+    username:admin
+    username:admin
+
+    ## 创建数据库
+    create database {database_name}
+    eg.: create database test_db
+
+    ## 删除数据库
+    drop database {database_name}
+    eg.: drop database test_db
+
+    ## 使用数据库
+    use database {database_name}
+    eg.: use database test_db
+
+    ## 创建表
+    create table {table_name} ({column_name} {data_type} {PK,null...},{column_name} {data_type} {PK,null...}...)
+    eg.: create table test (v1 int PK null,v2 int)
+
+    ## 删除表
+    drop table {table_name}
+    eg.: drop table test
+
+    ## 添加字段
+    alter {table_name} add ({column_name} {data_type} {PK,null...})
+    eg.: alter test add (v3 int)
+
+    ## 删除字段
+    alter {table_name} drop ({column_name})
+    eg.: alter test drop (v3)
+
+    ## 修改字段
+    alter {table_name} modify {alter_field_name} ({column_name} {data_type} {PK,null...}) 
+    eg.: alter test modify v1 (v3 int PK null)
+    
+    ## 记录插入
+    insert into {table_name} {column_name=value,column_name=value,...)
+    eg.: insert into test v1=1,v2=2
+
+    ## 记录插入（多重）
+    insert into {table_name} {column_name=value,column_name=value,...&column_name=value,column_name=value,...)
+    eg.: insert into test v3=2,v2=4&v3=3,v2=5
+
+    ## 记录删除
+    delete on {table_name} where {column_name=value或column_name>value或column_name<value}
+    eg.: delete on test where v3=1
+
+    ## 记录删除（多重）
+    delete on {table_name} where {column_name=value或column_name>value或column_name<value&column_name=value或column_name>value或column_name<value&..}
+    eg.: delete on test where v3=1&v2=2
+
+    ## 记录修改
+    update {table_name} set column_name=value,column_name=value,... where {column_name=value或column_name>value或column_name<value（可多重）}
+    eg.: update test set v3=4,v2=3 where v3=2
+
+    ## 选择全部
+    select * from {table_name}
+    eg.: select * from test
+
+    ## 选择指定列
+    select {column_name} from {table_name}
+    eg.:select v3 from test
+
+    ## 选择where条件
+    select * 或{column_name} from {table_name} where {column_name=value或column_name>value或column_name<value（可多重）}
+    eg.: select * from test where v3=4
+
+    ## 注册用户
+    signup {username} {password}
+    eg.: signup admin admin
     """)
 
 
@@ -306,6 +356,16 @@ def query(sql, tag=''):
         # 调用函数update
         dbms_function.update_record(table_name, using_db, using_dbname, cols, condition_list, multiFlag)
 
+    #注册用户
+    elif operate == 'signup':
+        if user != 'admin':
+            print("[!]You are not admin.")
+            return False
+        #若sql_word[1]不存在
+        try:
+            dbms_function.signup(sql_word[1], sql_word[2])
+        except:
+            print("[!]Syntax Error.")
 
     # 帮助指令
     elif operate == 'help':
