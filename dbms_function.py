@@ -498,12 +498,18 @@ def delete_record(table_name, current_database, current_dbname, condition_list):
                     if table.cell(row=i + 1, column=field_column).value < condition[1]:
                         delete_rows_list.append(i + 1)
             delete_rows.append(delete_rows_list)
+            delete_rows_list = []
             j += 1
+
+        #print("delete_row_list为:"+str(delete_rows))
 
         # delete_rows没有元素
         if len(delete_rows) == 0:
             print("没有找到符合条件的记录.")
             return
+
+        deletePos = []
+        # 将delete_rows[0]中的元素与delete_rows[i]中的元素比较，若两个数组中都拥有此元素则保留，则存储到新的数组中
         # 将若有元素在delete_rows中每个组都出现，得出新的list
         for i in range(len(delete_rows)):
             for j in range(len(delete_rows[0])):
@@ -514,12 +520,23 @@ def delete_record(table_name, current_database, current_dbname, condition_list):
                         break
                     else:
                         flag = True
-            if flag:
-                delete_rows[0].remove(delete_rows[0][j])
+                if flag:
+                    deletePos.append(delete_rows[0][j])
+        
+        deleteIndex = []
+        #找到delete_rows[0]中的元素index
+        for i in range(len(deletePos)):
+            deleteIndex.append(delete_rows[0].index(deletePos[i]))
+        delTime = 0
+        for i in range(len(deleteIndex)):
+            delete_rows[0].pop(deleteIndex[i] - delTime)
+            delTime += 1
+
+        #print("删除的行号为:"+str(delete_rows[0]))
         # 按照delete_rows[0]删除行
         for i in range(len(delete_rows[0])):
-            table.delete_rows(delete_rows[0][i])
-            print("第" + str(delete_rows[0][i] - 1) + "行删除成功.")
+            table.delete_rows(delete_rows[0][i] - i)
+            print("第" + str(delete_rows[0][i] - 1 - i) + "行删除成功.")
         # 保存xlsx
         current_database.save(db_path + current_dbname + '.xlsx')
     else:
@@ -602,6 +619,7 @@ def update_record(table_name, current_database, current_dbname, cols, condition_
                     if table.cell(row=i + 1, column=field_column).value < condition[1]:
                         update_rows_list.append(i + 1)
             update_rows.append(update_rows_list)
+            update_rows_list = []
             j += 1
         # update_rows没有元素
         if len(update_rows) == 0:
@@ -629,18 +647,18 @@ def update_record(table_name, current_database, current_dbname, cols, condition_
                 # columns为一维数组
                 for columns in cols:
                     # 查找匹配的列头是否与columns[0]匹配
-                    for i in range(table_columns):
-                        if i == 0:
+                    for j in range(table_columns):
+                        if j == 0:
                             flag = False
                         if flag == True:
                             break
-                        if table.cell(row=1, column=i + 1).value == columns[0]:
+                        if table.cell(row=1, column=j + 1).value == columns[0]:
                             # 在指定行插入一行值为columns[1]的数据
-                            table.cell(row=update_rows[0][i], column=i + 1).value = columns[1]
+                            table.cell(row=update_rows[0][i], column=j + 1).value = columns[1]
                             # 成功插入一行
                             print(columns[0] + ':' + columns[1] + "插入成功.")
                             flag = True
-                        elif i == table_columns - 1 and table.cell(row=1, column=i + 1).value != columns[0]:
+                        elif j == table_columns - 1 and table.cell(row=1, column=j + 1).value != columns[0]:
                             # 没有找到对应的列头
                             print("该表中不存在该字段.")
                 # 保存xlsx文件

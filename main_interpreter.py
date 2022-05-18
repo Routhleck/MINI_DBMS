@@ -325,13 +325,7 @@ def query(sql, tag=''):
     elif operate == 'delete':
         table_name = sql_word[2]
         if 'where' == sql_word[3]:
-            if '&' in sql:
-                cols = sql_word[4].split('&')
-                for p in range(len(cols)):
-                    col = cols[p]
-                    condition_list = col.split(',')
-            else:
-                condition_list = sql_word[4].split(',')
+            condition_list = sql_word[4].split(',')
             dbms_function.delete_record(table_name, using_db, using_dbname, condition_list)
         else:
             print("[!]Syntax Error.")
