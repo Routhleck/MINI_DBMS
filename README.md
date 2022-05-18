@@ -17,9 +17,9 @@
 - [x] 选择指定列
 - [x] 选择where条件
 - [x] GUI
-- [ ] 读取脚本
+- [x] 读取脚本
 - [ ] 索引
-- [ ] 视图
+- [x] 视图
 - [x] 用户权限
 - [ ] 完整性约束
 
@@ -110,3 +110,8 @@ eg.: signup admin admin
 load {script_name}
 
 eg.: load test.txt
+
+## 创建视图
+create view {view_name} as select * 或{column_name} from {table_name}
+
+eg.: create view test as select * from test
