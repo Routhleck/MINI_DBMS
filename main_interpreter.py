@@ -196,10 +196,18 @@ def query(sql, tag=''):
                 dbms_function.creat_table(sql_word[2], using_db, using_dbname, columns_list)
             except:
                 print("[!]Error")
-        elif sql_word[1] == 'view':  # creat view test1 as select * from user
-            viewname = sql_word[2]
-            sql = ' '.join(sql_word[4:])
-            dbms_function.view(viewname, sql)
+        #创建视图
+        elif sql_word[1] == 'view':
+            #若sql_word[2]存在
+            if sql_word[2]:
+                viewname = sql_word[2]
+                if sql_word[3] == 'as' and sql_word[4] == 'select':
+                    sql = sql_word[5:]
+                    dbms_function.create_view(viewname, sql,using_db)
+                else:
+                    print("[!]Syntax Error.\neg:>create view viewname as select * from table")
+            else:
+                print("[!]Syntax Error.\neg:>create view viewname as select * from table")
 
         elif sql_word[1] == 'index':
             return

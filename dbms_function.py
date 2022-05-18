@@ -2,6 +2,7 @@ from collections import UserList
 import hashlib
 import os
 import re
+from numpy import save
 
 from openpyxl import *
 from prettytable import PrettyTable
@@ -926,3 +927,38 @@ def iter_rows(ws):  # 表格按行数组形式输出，eg:list(iter_rows(a))
 def iter_cols(ws):  # 表格按行数组形式输出，eg:list(iter_rows(a))
     for row in ws.iter_cols():
         yield [cell.value for cell in row]
+
+#创建视图
+def create_view(view_name,sql,using_db):
+    if sql[1] == 'from':
+        table_name = sql[2]
+        #若using_db的sheet中存在表
+        if table_name in using_db:
+            table = using_db[table_name]
+            #若sql[0] == '*'
+            if sql[0] == '*':
+                #创建新的文件'data/'+'view_'view_name+'.xlsx'
+                wb = Workbook()
+                ws = wb.active
+                ws.title = view_name
+                #将table复制到新的文件中
+                for row in iter_rows(table):
+                    ws.append(row)
+                wb.save('data/'+'view_'+view_name+'.xlsx')
+                print("成功创建视图")
+            else:
+                #选择sql[0]中的列
+                cols = sql[0].split(',')
+                #创建新的文件'data/'+'view_'view_name+'.xlsx'
+                wb = Workbook()
+                ws = wb.active
+                ws.title = view_name
+                #将table中对应cols的列复制到新的文件中
+                for row in iter_rows(table):
+                    ws.append([row[cols.index(col)] for col in cols])
+                wb.save('data/'+'view_'+view_name+'.xlsx')
+                print("成功创建视图")
+        else:
+            print("该表不存在")
+    else:
+        print("[!]Syntax Error")
