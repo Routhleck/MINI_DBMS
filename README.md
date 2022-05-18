@@ -33,6 +33,9 @@
 点击加载加载数据
 
 加载完成后可在data中查看每个数据库以及sheet
+
+## exe文件夹为可执行文件
+release便是exe中的文件
 ## 登录管理员
 username:admin
 username:admin
