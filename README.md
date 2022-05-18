@@ -105,3 +105,8 @@ eg.: select * from test where v3=4
 signup {username} {password}
 
 eg.: signup admin admin
+
+## 读取脚本
+load {script_name}
+
+eg.: load test.txt
