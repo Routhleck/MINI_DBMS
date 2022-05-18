@@ -81,7 +81,7 @@ delete on {table_name} where {column_name=value或column_name>value或column_nam
 
 eg.: delete on test where v3=1
 ## 记录删除（多重）
-delete on {table_name} where {column_name=value或column_name>value或column_name<value&column_name=value或column_name>value或column_name<value&..}
+delete on {table_name} where {column_name=value或column_name>value或column_name<value,column_name=value或column_name>value或column_name<value,..}
 
 eg.: delete on test where v3=1&v2=2
 ## 记录修改
