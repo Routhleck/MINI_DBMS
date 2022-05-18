@@ -100,6 +100,10 @@ def help():
     ## 注册用户
     signup {username} {password}
     eg.: signup admin admin
+
+    ## 读取脚本
+    load {script_name}
+    eg.: load test.txt
     """)
 
 
@@ -384,6 +388,18 @@ def query(sql, tag=''):
             for index in indexs:
                 if '.DS' not in index:
                     print("[*] " + index[:-5])
+    
+    # 读取脚本
+    elif operate == 'load':
+        #弹出窗口按行读取txt
+        file_name = sql_word[1]
+        file_path = 'data/script/' + file_name + '.txt'
+        if os.path.exists(file_path):
+            #按行读取txt文件
+            f = os.open(file_path, os.O_RDONLY)
+            lines = os.read(f, os.path.getsize(file_path)).decode('utf-8').split('\n')
+            for line in lines:
+                query(line)
     else:
         print("[!]Syntax Error.")
 
