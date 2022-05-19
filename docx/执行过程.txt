@@ -1,0 +1,35 @@
+先点submit
+用户名：admin
+密码：admin
+再次点击
+## 创建数据库
+create database test
+## 删除数据库(删完再创一遍）
+drop database test
+## 使用数据库
+use database test
+## 创建表(两个都创）
+create table student (sno int,sname char[10])
+create table sc (sno int,cno int)
+## 删除表
+drop table sc
+## 添加字段
+alter student add (age int)
+## 删除字段
+alter student drop (age)
+## 修改字段
+alter student modify sname (sname char[20])
+## 记录插入
+insert into student sno=1,sname=hsc
+## 记录插入（多重）
+insert into student sno=2,sname=js&sno=3,sname=xsc
+## 记录删除
+delete on student where sno=3
+## 记录修改
+update student set sno=2,sname=lt where sno=2
+## 选择全部
+select * from student
+## 选择指定列
+select sname from student
+## 选择where条件
+select * from student where sno=1
