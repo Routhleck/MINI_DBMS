@@ -182,6 +182,8 @@ def Initialization():
 
 def query(sql, tag=''):
     sql_word = sql.split(" ")
+    global using_dbname
+    global using_db
     if len(sql_word) < 2:
         print("[!] Wrong query!")
         return
@@ -207,6 +209,7 @@ def query(sql, tag=''):
             print(columns_list, using_dbname)
             try:
                 dbms_function.creat_table(sql_word[2], using_db, using_dbname, columns_list)
+                using_db = load_workbook(db_path + using_dbname + '.xlsx')
             except:
                 print("[!]Error")
         #创建视图
@@ -236,6 +239,9 @@ def query(sql, tag=''):
         if sql_word[1] == 'table':
             try:
                 dbms_function.drop_table(sql_word[2], using_dbname, using_db)
+                #若数据库还存在
+                if os.path.exists(db_path + using_dbname + '.xlsx'):
+                    using_db = load_workbook(db_path + using_dbname + '.xlsx')
             except:
                 print("[!]Error")
     # 字段操作alter
@@ -244,24 +250,24 @@ def query(sql, tag=''):
         if sql_word[2] == 'add':
             columns_list = re.findall('\((.*)\)', sql)[0].split(',')
             try:
-                dbms_function.add_field(tbname=sql_word[1], columns_list=columns_list, using_dbname=using_dbname,
-                                        using_db=using_db)
+                dbms_function.add_field(tbname=sql_word[1], columns_list=columns_list, using_dbname=using_dbname,using_db=using_db)
+                using_db = load_workbook(db_path + using_dbname + '.xlsx')
             except:
                 print("[!]Error")
         # 删除字段
         elif sql_word[2] == 'drop':
             columns_list = re.findall('\((.*)\)', sql)[0].split(',')
             try:
-                dbms_function.drop_field(tbname=sql_word[1], columns_list=columns_list, using_dbname=using_dbname,
-                                         using_db=using_db)
+                dbms_function.drop_field(tbname=sql_word[1], columns_list=columns_list, using_dbname=using_dbname,using_db=using_db)
+                using_db = load_workbook(db_path + using_dbname + '.xlsx')
             except:
                 print("[!]Error")
         # 修改字段
         elif sql_word[2] == 'modify':
             columns_list = re.findall('\((.*)\)', sql)[0].split(',')
             try:
-                dbms_function.modify_field(tbname=sql_word[1], alterFieldName=sql_word[3], columns_list=columns_list,
-                                           using_dbname=using_dbname, using_db=using_db)
+                dbms_function.modify_field(tbname=sql_word[1], alterFieldName=sql_word[3], columns_list=columns_list,using_dbname=using_dbname, using_db=using_db)
+                using_db = load_workbook(db_path + using_dbname + '.xlsx')
             except:
                 print("[!]Error")
     # 选择操作select
@@ -392,7 +398,7 @@ def query(sql, tag=''):
             dbms_function.show_db()
         if sql_word[1] == 'table':
             usdbnm = using_dbname
-            dbms_function.use_db('table_information')
+            use_db('table_information')
             # 若sql_word[2]存在，则指定表
             if len(sql_word) > 2 and sql_word[2] != '':
                 tbname = sql_word[2]
@@ -401,7 +407,7 @@ def query(sql, tag=''):
                 print('[!]Syntax Error.\neg:>help table table_name')
         if sql_word[1] == 'view':
             view_name = sql_word[2]
-            dbms_function.use_db('view')
+            use_db('view')
             dbms_function.select('sql', 'sql', {'viewnamw': view_name})
         if sql_word[1] == 'index':
             print("All Index:")

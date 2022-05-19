@@ -771,10 +771,11 @@ def set_permission(user, database, action):
     col = action_list.index(action) + 1
     allow_user = table.cell(row=row, column=col).value.split(',')
     if user in allow_user:
-        print("user have this permission")
+        print("用户已有该权限")
     else:
         table.cell(row=row, column=col).value = table.cell(row=row, column=col).value + ',' + user
         db.save("data/system.xlsx")
+        print("成功给予用户" + user + ':' + action +"权限")
 
 
 # revoke select on test_tb for testuser
@@ -792,8 +793,9 @@ def del_permission(user, database, action):
         else:
             table.cell(row=row, column=col).value = table.cell(row=row, column=col).value.replace(',' + user, '')
         db.save("data/system.xlsx")
+        print("成功收回用户" + user + ':' + action +"权限")
     else:
-        print("user didn't have this permission")
+        print("用户没有该权限")
 
 
 def check_permission(user, database, action):
