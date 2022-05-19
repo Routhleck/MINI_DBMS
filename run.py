@@ -1,5 +1,7 @@
 import os
 import sys
+#导入QFileDialog
+from PyQt5.QtWidgets import QFileDialog
 
 import qdarkstyle
 from PyQt5 import QtGui, QtWidgets
@@ -45,6 +47,7 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
 
         self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.pushButtonbrowse.clicked.connect(self.openFileNamesDialog)
+        self.pushButtonbrowseLoad.clicked.connect(self.openFileNamesDialogLoad)
         self.pushButtonclear.clicked.connect(self.clearwidget)
         self.pushButtonselall.clicked.connect(self.selectall)
         self.pushButtonload.clicked.connect(self.LoadProcess)
@@ -147,6 +150,23 @@ class anaxcelhandler(QtWidgets.QMainWindow, UI_lan.Ui_MainWindow):
             for file in files:
                 # 仅保留file的文件名且去除后缀
                 self.listWidget.addItem(os.path.basename(file).split('.')[0])
+
+    def openFileNamesDialogLoad(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        filterxls = "XLS (*.xls *.XLS)"
+        filterxlsx = "XLSX (*.xlsx *.XLSX)"
+        print('打开文件')
+        if self.comboBoxfiletype.currentIndex() == 1:
+            files, _ = QFileDialog.getOpenFileNames(self, "Select XLS Files", filter=filterxls, options=options)
+            if files:
+                for file in files:
+                    self.listWidget.addItem(os.path.basename(file).split('.')[0])
+        elif self.comboBoxfiletype.currentIndex() == 0:
+            files, _ = QFileDialog.getOpenFileNames(self, "Select XLSX Files", filter=filterxlsx, options=options)
+            if files:
+                for file in files:
+                    self.listWidget.addItem(os.path.basename(file).split('.')[0])
 
     def clearwidget(self):
         self.listWidget.clear()

@@ -104,6 +104,19 @@ def help():
     ## 读取脚本
     load {script_name}
     eg.: load test.txt
+
+    ## 创建视图
+    create view {view_name} as select * 或{column_name} from {table_name}
+    eg.: create view test as select * from test
+
+    ## 赋予权限
+    grant {action} on {database_name} for {username}
+    eg.: grant select on test_db for aaa
+
+    ## 收回权限
+    revoke {action} on {database_name} for {username}
+    eg.: revoke select on test_db for aaa
+
     """)
 
 
