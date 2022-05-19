@@ -1,0 +1,4 @@
+use database test_db
+select * from test
+insert into test v3=2,v2=4
+select * from test
