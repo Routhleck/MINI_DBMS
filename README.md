@@ -42,11 +42,11 @@ username:admin
 ## 创建数据库
 create database {database_name}
 
-eg.: create database test_db
+eg.: create database test
 ## 删除数据库
 drop database {database_name}
 
-eg.: drop database test_db
+eg.: drop database test
 ## 使用数据库
 use database {database_name}
 
@@ -54,11 +54,11 @@ eg.: use database test_db
 ## 创建表
 create table {table_name} ({column_name} {data_type} {PK,null...},{column_name} {data_type} {PK,null...}...)
 
-eg.: create table test (v1 int PK null,v2 int)
+eg.: create table testTable (v1 int PK null,v2 int)
 ## 删除表
 drop table {table_name}
 
-eg.: drop table test
+eg.: drop table testTable
 ## 添加字段
 alter {table_name} add ({column_name} {data_type} {PK,null...})
 

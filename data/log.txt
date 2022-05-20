@@ -1,0 +1,37 @@
+2022-05-20 10:53:50 use database test_db
+2022-05-20 10:54:14 use database system
+2022-05-20 11:55:46 create database test
+2022-05-20 11:55:55 drop database test
+2022-05-20 11:56:09 use database test_db
+2022-05-20 11:56:38 create table testTable (v1 int PK,v2 int)
+2022-05-20 11:56:57 drop table testTable
+2022-05-20 11:57:21 alter test add (v3 int)
+2022-05-20 11:57:37 alter test drop (v3)
+2022-05-20 11:58:01 alter test modify v1 (v3 int PK null)
+2022-05-20 11:58:43 insert into test v1=1,v2=3
+2022-05-20 11:59:04 insert into test v3=1,v2=2
+2022-05-20 11:59:40 delete on test v2=3
+2022-05-20 11:59:57 delete on test where v2=3
+2022-05-20 12:00:44 insert into test v3=2,v2=4&v3=3,v2=6
+2022-05-20 12:01:08 delete on test where v3=1,v2=5
+2022-05-20 12:01:26 delete on test where v3=7
+2022-05-20 12:01:26 delete on test where v3=7
+2022-05-20 12:01:57 create testTable (v1 char[10])
+2022-05-20 12:02:10 create table testTable (v1 char[10])
+2022-05-20 12:02:31 insert into test v1=测试
+2022-05-20 12:02:42 insert into testTable v1=测试
+2022-05-20 12:03:23 update test set v3=10,v2=11 where v3=2
+2022-05-20 12:03:38 select * from test
+2022-05-20 12:03:47 select v3 from test
+2022-05-20 12:03:55 select v3,v2 from test
+2022-05-20 12:04:10 select v3,v2 from test where v3=10
+2022-05-20 12:04:39 select v1 from testTable where v1=测试
+2022-05-20 12:04:58 signup bbb bbb
+2022-05-20 12:05:22 use test_db
+2022-05-20 12:05:26 use database test_db
+2022-05-20 12:05:59 grant use on test_db for bbb
+2022-05-20 12:06:17 use database test_db
+2022-05-20 12:06:59 create view test as select * from test
+2022-05-20 12:07:05 use database test_db
+2022-05-20 12:07:15 create view test as select * from test
+2022-05-20 12:07:51 load test1

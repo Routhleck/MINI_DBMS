@@ -1,5 +1,6 @@
 import os
 import re
+import time
 from openpyxl import *
 import dbms_function
 
@@ -467,3 +468,11 @@ def interpreter(command):
         help()
     else:
         query(command)
+    #将command写入log.txt
+    f = os.open('data/log.txt', os.O_RDWR | os.O_APPEND)
+    #写入时间+command
+    byte_str = ((time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())) + ' ' + command + '\n').encode('utf-8')
+    os.write(f, byte_str)
+    os.close(f)
+
+
