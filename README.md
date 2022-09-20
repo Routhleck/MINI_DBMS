@@ -1,5 +1,8 @@
 # 数据库课程设计
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片17.png)
+
 功能进度：
+
 - [x] SQL语句解析
 - [x] 数据库创建
 - [x] 数据库删除
@@ -145,13 +148,13 @@ eg.: revoke select on test_db for aaa
 
 ## 1.3 整体功能
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image002.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片1.jpg)
 
 ## 1.4环境依赖
 
 本项目运用的IDE为pycharm，语言为Python，其中UI界面的设计引入了pyqt5库，其他设计用的库有：
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image004.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片2.png)
 
  
 
@@ -165,7 +168,7 @@ eg.: revoke select on test_db for aaa
 
 使用openpyxl库进行文件内容的操作。
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image006.jpg)![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image008.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片3.png)![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片4.png)
 
 设置system库，table_information库，view库为系统初始化后建立的初始数据库。
 
@@ -299,7 +302,7 @@ creat_table('permission', db, 'system',permission_tb_col)
 
 目录结构：
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image010.gif)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片6.png)
 
 ## 1.3 用户验证及登录模块
 
@@ -553,7 +556,7 @@ db.save("data/view.xlsx")
 
 Query处理语句的部分：
 
-  ![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image012.gif)
+  ![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片7.png)
 
 def insert(table_name, current_database, current_dbname, columns_list):
 
@@ -1157,7 +1160,7 @@ grant语句
 
 grant select on test_tb for testuser
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image014.gif)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片8.png)
 
 （这里第一列是具有权限的对象，不只是数据库，可以是table,view,index，在函数对应函数处理时将数据库名变量换成其他对象就行）
 
@@ -1695,7 +1698,7 @@ file.close()
 
  
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image016.gif)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片9.png)
 
 B+树的部分代码：
 
@@ -1957,7 +1960,7 @@ def levels(self):
 
 定义来一些全局变量：
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image018.gif)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片10.png)
 
 def use_db(dbname):
 
@@ -1995,29 +1998,29 @@ print(u"数据库创建操作执行成功")
 
 ### 1) 内部类
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image020.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片11.png)
 
 ### 2) 内部类与字段
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image022.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片12.png)
 
 ### 3) 内部类与字段与函数方法
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image024.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片13.png)
 
 ## 2. UI_lan.py类图
 
 ### 1) 内部类
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image026.gif)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片14.png)
 
 ### 2) 内部类与字段
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image028.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片15.png)
 
 ### 3) 内部类与字段与函数方法
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image030.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片16.png)
 
  
 
@@ -2031,78 +2034,78 @@ print(u"数据库创建操作执行成功")
 
 \> run.py 运行程序
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image032.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片17.png)
 
 输入用户名密码进行登录
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image034.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片18.png)
 
 创建数据库
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image035.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片19.jpg)
 
 删除数据库
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image037.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片20.png)
 
  
 
 使用数据库
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image039.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片21.png)
 
 创建表
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image041.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片22.png)
 
 删除表（库中只含一个表）
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image043.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片23.png)
 
 删除表（库中含多个表）
 
  
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image045.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片24.png)
 
 添加字段
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image047.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片25.png)
 
 删除字段
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image049.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片26.png)
 
 修改字段
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image051.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片27.png)
 
 记录插入
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image053.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片28.png)
 
 记录插入（多重）
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image055.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片29.png)
 
 记录删除
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image057.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片30.png)
 
 记录修改
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image059.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片31.png)
 
 选择全部
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image061.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片32.png)
 
 选择指定列
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image063.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片33.png)
 
 选择where条件
 
-![img](file:///C:/Users/13107/AppData/Local/Temp/msohtmlclip1/01/clip_image065.jpg)
+![img](https://raw.githubusercontent.com/Routhleck/MINI_DBMS/master-python/img/图片34.png)
 
  
